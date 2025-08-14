@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://gc1lqe6t6vxd"]
+
+[ext_resource type="Texture2D" uid="uid://d06mpr5pe82fg" path="res://icon.svg" id="1_4872r"]
+[ext_resource type="Script" path="res://PickableTarget.cs" id="3_d1vqu"]
+[ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="3_l0mmh"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Target" type="Node2D" parent="."]
+position = Vector2(945, 370)
+script = ExtResource("3_d1vqu")
+
+[node name="Icon" type="Sprite2D" parent="Target"]
+position = Vector2(-3.00024, 4.00003)
+scale = Vector2(0.203125, 0.21875)
+texture = ExtResource("1_4872r")
+
+[node name="AutonomousAgentScene" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("3_l0mmh")]
+position = Vector2(285, 155)
+targetNode = NodePath("../Target")
