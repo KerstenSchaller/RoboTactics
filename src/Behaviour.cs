@@ -6,11 +6,13 @@ namespace Behaviours
     {
         protected bool enabled = false;
         public abstract Vector2 getDesiredDirectionImpl();
+        public float Weight = 1.0f;
         public Vector2 getDesiredDirection()
         {
             if (enabled)
             {
-                return getDesiredDirectionImpl();
+                var desired = getDesiredDirectionImpl();
+                return desired;
             }
             return Vector2.Zero;
         }

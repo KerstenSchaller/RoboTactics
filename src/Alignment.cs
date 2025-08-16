@@ -33,7 +33,7 @@ namespace Behaviours
                 return Vector2.Zero;
 
             avgVelocity /= count;
-            return avgVelocity.Normalized();
+            return avgVelocity;
         }
     }
 }

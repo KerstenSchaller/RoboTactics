@@ -20,8 +20,17 @@ class AutonomousAgent
                 if(behaviour.Enabled)
                 {
                     Vector2 desired = behaviour.getDesiredDirection();
-                    applyForce(desired);
+                    if(desired != Vector2.Inf)
+                    {
+                        // only if valid desired direction
+                        applyForce(desired, behaviour.Weight);
+                    }
                 }
+            }
+            velocity += acceleration;
+            if (velocity.Length() > maxSpeed)
+            {
+                velocity = velocity.Normalized() * maxSpeed;
             }
             return velocity;
         }
@@ -40,6 +49,12 @@ class AutonomousAgent
         maxSpeed = _maxSpeed;
         maxForce = _maxForce;
         mass = _mass;
+
+         // Randomize velocity, keeping total length at 50
+        var rand = new Random();
+        double angle = rand.NextDouble() * Math.PI * 2;
+        velocity = new Vector2((float)(Math.Cos(angle) * 50), (float)(Math.Sin(angle) * 50));
+        
     }
 
     public void ConfigureAgent(float maxSpeed, float maxForce, float mass)
@@ -62,14 +77,13 @@ class AutonomousAgent
         behaviours.Remove(_behaviour);
     }
 
-    public void applyForce(Vector2 desired)
+    public void applyForce(Vector2 desired, float Weight)
     {
         var steering = desired.Normalized()*maxSpeed - velocity;
         steering = (steering.Length() >= maxForce) ? steering.Normalized()*maxForce:steering;
 
-        acceleration += steering/mass;
-        velocity += acceleration;
-        //GD.Print("s: " + velocity.Length() + " f: " + steering.Length() + " mxF: " + maxForce);
+        acceleration += (steering/mass)*Weight;
+        
 
     }
 }

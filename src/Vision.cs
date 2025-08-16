@@ -14,9 +14,10 @@ public partial class Vision : Area2D
                 if (cb != (CharacterBody2D)GetParent())
                 {
                     bodies.Add(cb);
-                    GD.Print($"Overlapping Body: {body.Name}, Type: {body.GetType()}");
+                    //GD.Print($"Overlapping Body: {body.Name}, Type: {body.GetType()}");
 
                 }
+
 
              }
         }

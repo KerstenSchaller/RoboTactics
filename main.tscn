@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://gc1lqe6t6vxd"]
+[gd_scene load_steps=7 format=3 uid="uid://gc1lqe6t6vxd"]
 
+[ext_resource type="Script" path="res://Main.cs" id="1_u7wvr"]
 [ext_resource type="Texture2D" uid="uid://c6nx24520n0y2" path="res://Dark-Deep-Space-4K-Wallpaper1.jpg" id="1_ue7b0"]
+[ext_resource type="Script" path="res://tools/ConnectionTool.cs" id="4_w5lbw"]
 [ext_resource type="Script" path="res://src/BoundaryArea.cs" id="7_h4cju"]
 [ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="8_r23gi"]
 
@@ -8,6 +10,7 @@
 size = Vector2(3828.75, 2145)
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_u7wvr")
 
 [node name="Dark-deep-space-4k-wallpaper1" type="Sprite2D" parent="."]
 position = Vector2(256, 152)
@@ -15,7 +18,7 @@ texture = ExtResource("1_ue7b0")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(264, 154)
-zoom = Vector2(0.3, 0.3)
+zoom = Vector2(0.5, 0.5)
 
 [node name="BoundaryArea2D" type="Area2D" parent="."]
 position = Vector2(24, 14)
@@ -26,30 +29,15 @@ position = Vector2(247, 133)
 shape = SubResource("RectangleShape2D_o472q")
 
 [node name="AutonomousAgentScene" parent="." instance=ExtResource("8_r23gi")]
-position = Vector2(909, 58)
-
-[node name="Agent" parent="AutonomousAgentScene" index="2"]
-EnableWander = false
+position = Vector2(761, 2)
+EnableCohesion = false
+EnableAlignment = false
+EnableSeparation = false
 
 [node name="AutonomousAgentScene2" parent="." instance=ExtResource("8_r23gi")]
-position = Vector2(560, -230)
+position = Vector2(715, -10)
 
-[node name="Agent" parent="AutonomousAgentScene2" index="2"]
-EnableWander = false
-
-[node name="AutonomousAgentScene3" parent="." instance=ExtResource("8_r23gi")]
-position = Vector2(101, -305)
-
-[node name="Agent" parent="AutonomousAgentScene3" index="2"]
-EnableWander = false
-
-[node name="AutonomousAgentScene4" parent="." instance=ExtResource("8_r23gi")]
-position = Vector2(-938, 499)
-
-[node name="Agent" parent="AutonomousAgentScene4" index="2"]
-EnableWander = false
-
-[editable path="AutonomousAgentScene"]
-[editable path="AutonomousAgentScene2"]
-[editable path="AutonomousAgentScene3"]
-[editable path="AutonomousAgentScene4"]
+[node name="ConnectionTool" type="Node2D" parent="." node_paths=PackedStringArray("firstNode", "secondNode")]
+script = ExtResource("4_w5lbw")
+firstNode = NodePath("../AutonomousAgentScene")
+secondNode = NodePath("../AutonomousAgentScene2")

@@ -2,7 +2,7 @@ using Behaviours;
 using Godot;
 using System;
 
-public partial class AutonomousAgentScene : Node2D
+public partial class AutonomousAgentScene : CharacterBody2D
 {
     // Enum for behaviour types
     public enum BehaviourType
@@ -21,7 +21,6 @@ public partial class AutonomousAgentScene : Node2D
     AutonomousAgent autonomousAgent;
     [Export] Node2D targetNode;
     [Export] Area2D visionArea;
-    [Export] CharacterBody2D characterBody;
 
     // Exported bools for each behaviour
 
@@ -60,19 +59,19 @@ public partial class AutonomousAgentScene : Node2D
 
     public override void _Ready()
     {
-        autonomousAgent = new AutonomousAgent(300.0f, 1000.0f, 0.5f);
-
+        autonomousAgent = new AutonomousAgent(300.0f, 300/(2*60), 0.5f);
+       
         // Instantiate all behaviours
-        seekBehaviour = new Behaviours.Seek(targetNode, characterBody);
-        fleeBehaviour = new Behaviours.Flee(targetNode, characterBody);
-        circleAroundBehaviour = new Behaviours.CircleAround(targetNode, characterBody);
-        wanderBehaviour = new Behaviours.Wander(targetNode, characterBody);
-        arriveBehaviour = new Behaviours.Arrive(targetNode, characterBody);
-        pursueBehaviour = new Behaviours.Pursue(targetNode, characterBody);
-        evadeBehaviour = new Behaviours.Evade(targetNode, characterBody);
-        cohesionBehaviour = new Behaviours.Cohesion(visionArea as Vision, characterBody);
-        alignmentBehaviour = new Behaviours.Alignment(visionArea as Vision, characterBody);
-        separationBehaviour = new Behaviours.Separation(visionArea as Vision, characterBody);
+        seekBehaviour = new Behaviours.Seek(targetNode, this);
+        fleeBehaviour = new Behaviours.Flee(targetNode, this);
+        circleAroundBehaviour = new Behaviours.CircleAround(targetNode, this);
+        wanderBehaviour = new Behaviours.Wander(targetNode, this);
+        arriveBehaviour = new Behaviours.Arrive(targetNode, this);
+        pursueBehaviour = new Behaviours.Pursue(targetNode, this);
+        evadeBehaviour = new Behaviours.Evade(targetNode, this);
+        cohesionBehaviour = new Behaviours.Cohesion(visionArea as Vision, this);
+        alignmentBehaviour = new Behaviours.Alignment(visionArea as Vision, this);
+        separationBehaviour = new Behaviours.Separation(visionArea as Vision, this);
 
         // Add all behaviours to the agent
         autonomousAgent.addBehaviour(seekBehaviour);
@@ -85,6 +84,11 @@ public partial class AutonomousAgentScene : Node2D
         autonomousAgent.addBehaviour(cohesionBehaviour);
         autonomousAgent.addBehaviour(alignmentBehaviour);
         autonomousAgent.addBehaviour(separationBehaviour);
+
+        wanderBehaviour.Weight = 1f;
+        cohesionBehaviour.Weight = 2f;
+        alignmentBehaviour.Weight = 2f;
+        separationBehaviour.Weight = 2.5f;
 
         // Set enabled state from exported bools
         SetBehaviourEnabled(BehaviourType.Seek, EnableSeek);
@@ -111,15 +115,16 @@ public partial class AutonomousAgentScene : Node2D
         autonomousAgent.ConfigureAgent(maxSpeed, maxForce, mass);
     }
 
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
     {
-        if(characterBody == null || autonomousAgent == null)
+        if( autonomousAgent == null)
         {
-            GD.PrintErr($"[{nameof(AutonomousAgentScene)}] ({nameof(_Process)}): CharacterBody or AutonomousAgent is not set. File: {nameof(AutonomousAgentScene)}.cs");
+            GD.PrintErr($"[{nameof(AutonomousAgentScene)}] ({nameof(_Process)}): AutonomousAgent is not set. File: {nameof(AutonomousAgentScene)}.cs");
             return;
         }
-        characterBody.Velocity = autonomousAgent.Velocity;
-        characterBody.MoveAndSlide();
+        Velocity = autonomousAgent.Velocity;
+        this.Rotation = Velocity.Angle()+90f;
+        MoveAndSlide();
     }
 
     // Set behaviour enabled state by name, can be called from outside code

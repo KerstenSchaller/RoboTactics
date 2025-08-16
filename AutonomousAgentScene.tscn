@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://crwlu1igwd1qj"]
+[gd_scene load_steps=7 format=3 uid="uid://crwlu1igwd1qj"]
 
 [ext_resource type="Script" path="res://AutonomousAgentScene.cs" id="1_uquwu"]
 [ext_resource type="Script" path="res://HurtBoxArea.cs" id="2_geqqy"]
@@ -9,18 +9,23 @@
 radius = 58.0
 height = 116.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_rajhs"]
-radius = 633.013
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_utokv"]
 radius = 14.0357
 
-[node name="AutonomousAgentScene" type="CharacterBody2D"]
+[node name="AutonomousAgentScene" type="CharacterBody2D" node_paths=PackedStringArray("visionArea")]
+scale = Vector2(0.6, 0.6)
 collision_layer = 2
 collision_mask = 2
+script = ExtResource("1_uquwu")
+visionArea = NodePath("VisionArea")
+EnableWander = true
+EnableCohesion = true
+EnableAlignment = true
+EnableSeparation = true
 
-[node name="HurtBoxArea" type="Area2D" parent="."]
+[node name="HurtBoxArea" type="Area2D" parent="." node_paths=PackedStringArray("HealthComponent")]
 script = ExtResource("2_geqqy")
+HealthComponent = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxArea"]
 visible = false
@@ -30,22 +35,16 @@ shape = SubResource("CapsuleShape2D_rnstr")
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("3_28g8f")
 
-[node name="Agent" type="Node2D" parent="." node_paths=PackedStringArray("visionArea", "characterBody")]
-script = ExtResource("1_uquwu")
-visionArea = NodePath("../VisionArea")
-characterBody = NodePath("..")
-EnableCohesion = true
-EnableAlignment = true
-EnableSeparation = true
-
 [node name="VisionArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("3_kp0ci")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
-shape = SubResource("CircleShape2D_rajhs")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionArea"]
+position = Vector2(3.33333, -238.333)
+scale = Vector2(0.1, 0.7)
+polygon = PackedVector2Array(800, -16.6666, -766.667, -21.4285, -750, 566.667, -26, 340.019, 883.333, 576.19)
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -20.0

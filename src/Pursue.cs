@@ -23,7 +23,7 @@ namespace Behaviours
 
             float prediction = toTarget.Length() / (1f + 0.01f);
             Vector2 futurePosition = target.Position + targetVelocity * prediction * predictionFactor;
-            return (futurePosition - parent.Position).Normalized();
+            return (futurePosition - parent.Position);
         }
     }
 }

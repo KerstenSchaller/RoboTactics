@@ -33,7 +33,7 @@ namespace Behaviours
                 return Vector2.Zero;
 
             center /= count;
-            return (center - parent.GlobalPosition).Normalized();
+            return (center - parent.GlobalPosition);
         }
     }
 }

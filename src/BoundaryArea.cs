@@ -23,50 +23,46 @@ public partial class BoundaryArea : Area2D
             GD.PrintErr("BoundaryArea: CollisionShape2D must use RectangleShape2D.");
         }
 
-        // Find only top-level CharacterBody2D nodes (direct children of the scene root)
-        foreach (var node in GetParent().GetChildren())
-        {
-            if (node is CharacterBody2D cb)
-            {
-                characters.Add(cb);
 
-            }
-        }
     }
 
-    // No longer needed: FindCharacterBodiesRecursive
 
     public override void _Process(double delta)
     {
-        foreach (var character in characters)
+        foreach (var cb in GetParent().GetChildren() )
         {
-            Vector2 pos = character.GlobalPosition;
-            bool wrapped = false;
+            if (cb is CharacterBody2D character)
+            {
 
-            if (pos.X < boundaryRect.Position.X)
-            {
-                pos.X = boundaryRect.Position.X + boundaryRect.Size.X;
-                wrapped = true;
-            }
-            else if (pos.X > boundaryRect.Position.X + boundaryRect.Size.X)
-            {
-                pos.X = boundaryRect.Position.X;
-                wrapped = true;
+                Vector2 pos = character.GlobalPosition;
+                bool wrapped = false;
+
+                if (pos.X < boundaryRect.Position.X)
+                {
+                    pos.X = boundaryRect.Position.X + boundaryRect.Size.X;
+                    wrapped = true;
+                }
+                else if (pos.X > boundaryRect.Position.X + boundaryRect.Size.X)
+                {
+                    pos.X = boundaryRect.Position.X;
+                    wrapped = true;
+                }
+
+                if (pos.Y < boundaryRect.Position.Y)
+                {
+                    pos.Y = boundaryRect.Position.Y + boundaryRect.Size.Y;
+                    wrapped = true;
+                }
+                else if (pos.Y > boundaryRect.Position.Y + boundaryRect.Size.Y)
+                {
+                    pos.Y = boundaryRect.Position.Y;
+                    wrapped = true;
+                }
+            
+                if (wrapped)
+                        character.GlobalPosition = pos;
             }
 
-            if (pos.Y < boundaryRect.Position.Y)
-            {
-                pos.Y = boundaryRect.Position.Y + boundaryRect.Size.Y;
-                wrapped = true;
-            }
-            else if (pos.Y > boundaryRect.Position.Y + boundaryRect.Size.Y)
-            {
-                pos.Y = boundaryRect.Position.Y;
-                wrapped = true;
-            }
-
-            if (wrapped)
-                character.GlobalPosition = pos;
         }
     }
 }
