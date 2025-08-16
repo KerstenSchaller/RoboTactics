@@ -5,84 +5,11 @@ using System.Collections.Generic;
 
 
 
-namespace Behaviours
-{
-    public abstract class Behaviour
-    {
-        protected bool enabled = true;
-        public abstract Vector2 getDesiredDirection();
-        public virtual bool Enabled
-        {
-            get { return enabled; }
-            set { enabled = value; }
-        }
-
-        public void disable(){enabled = false;}
-        public void enable(){enabled = true; }
-    }
-
-    class Seek : Behaviour
-    {
-        Node2D target;
-        Node2D parent;
-        public Seek(Node2D _target, Node2D _parent)
-        {
-            this.target = _target;
-            this.parent = _parent;
-        }
-
-        public void changeTarget(Node2D _target)
-        {
-            this.target = _target;
-        }
-        public override Vector2 getDesiredDirection()
-        {
-            return target.Position - parent.Position;
-        }
-    }
-
-    class CircleAround : Behaviour
-    {
-        Node2D target;
-        Node2D parent;
-        public CircleAround(Node2D _target, Node2D _parent)
-        {
-            this.target = _target;
-            this.parent = _parent;
-        }
-
-        public override Vector2 getDesiredDirection()
-        {
-            return (target.Position - parent.Position).Orthogonal();
-        }
-
-    }
-
-    class Flee : Behaviour
-    {
-        Node2D target;
-        Node2D parent;
-        public Flee(Node2D _target, Node2D _parent)
-        {
-            this.target = _target;
-            this.parent = _parent;
-        }
-        public override Vector2 getDesiredDirection()
-        {
-            return -(target.Position - parent.Position);
-        }
-    }
-}
-
 class AutonomousAgent
 {
-    float mass;
-    float maxSpeed;
-    float maxForce;
-    Vector2 acceleration;
-    Vector2 velocity;
-
-    List<Behaviours.Behaviour> behaviours = new List<Behaviours.Behaviour>();
+    public float Mass { get => mass; set => mass = value; }
+    public float MaxSpeed { get => maxSpeed; set => maxSpeed = value; }
+    public float MaxForce { get => maxForce; set => maxForce = value; }
     public Vector2 Velocity
     {
         get
@@ -99,11 +26,26 @@ class AutonomousAgent
         }
     }
 
+    float mass;
+    float maxSpeed;
+    float maxForce;
+    Vector2 acceleration;
+    Vector2 velocity;
+
+    List<Behaviours.Behaviour> behaviours = new List<Behaviours.Behaviour>();
+
     public AutonomousAgent(float _maxSpeed, float _maxForce, float _mass)
     {
         maxSpeed = _maxSpeed;
         maxForce = _maxForce;
         mass = _mass;
+    }
+
+    public void ConfigureAgent(float maxSpeed, float maxForce, float mass)
+    {
+        this.MaxSpeed = maxSpeed;
+        this.MaxForce = maxForce;
+        this.Mass = mass;
     }
 
     public void addBehaviour(Behaviours.Behaviour _behaviour)

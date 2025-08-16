@@ -1,20 +1,71 @@
-[gd_scene load_steps=4 format=3 uid="uid://gc1lqe6t6vxd"]
+[gd_scene load_steps=8 format=3 uid="uid://gc1lqe6t6vxd"]
 
 [ext_resource type="Texture2D" uid="uid://d06mpr5pe82fg" path="res://icon.svg" id="1_4872r"]
-[ext_resource type="Script" path="res://PickableTarget.cs" id="3_d1vqu"]
-[ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="3_l0mmh"]
+[ext_resource type="Script" path="res://AutonomousAgentScene.cs" id="1_um7i8"]
+[ext_resource type="Script" path="res://src/Vision.cs" id="2_hwkts"]
+[ext_resource type="Script" path="res://HurtBoxArea.cs" id="4_eafar"]
+[ext_resource type="Script" path="res://HealthComponent.cs" id="5_6m7xn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dsdun"]
+radius = 633.013
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y5kbe"]
+radius = 58.0
+height = 116.0
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Target" type="Node2D" parent="."]
-position = Vector2(945, 370)
-script = ExtResource("3_d1vqu")
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(588, 319)
+zoom = Vector2(0.5, 0.5)
 
-[node name="Icon" type="Sprite2D" parent="Target"]
-position = Vector2(-3.00024, 4.00003)
-scale = Vector2(0.203125, 0.21875)
+[node name="PlayerCharachter1" type="CharacterBody2D" parent="."]
+
+[node name="Agent" type="Node2D" parent="PlayerCharachter1" node_paths=PackedStringArray("targetNode", "visionArea", "characterBody")]
+script = ExtResource("1_um7i8")
+targetNode = NodePath("../../EnemyCharachter1")
+visionArea = NodePath("../VisionArea")
+characterBody = NodePath("..")
+
+[node name="VisionArea" type="Area2D" parent="PlayerCharachter1"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("2_hwkts")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCharachter1/VisionArea"]
+shape = SubResource("CircleShape2D_dsdun")
+
+[node name="ColorRect" type="ColorRect" parent="PlayerCharachter1"]
+offset_left = -20.0
+offset_top = -18.0
+offset_right = 20.0
+offset_bottom = 22.0
+color = Color(1, 0.458961, 0.690422, 1)
+
+[node name="EnemyCharachter1" type="CharacterBody2D" parent="."]
+position = Vector2(963, 285)
+
+[node name="Icon" type="Sprite2D" parent="EnemyCharachter1"]
+position = Vector2(14, 2)
 texture = ExtResource("1_4872r")
 
-[node name="AutonomousAgentScene" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("3_l0mmh")]
-position = Vector2(285, 155)
-targetNode = NodePath("../Target")
+[node name="HurtBoxArea" type="Area2D" parent="EnemyCharachter1" node_paths=PackedStringArray("HealthComponent")]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("4_eafar")
+HealthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyCharachter1/HurtBoxArea"]
+visible = false
+position = Vector2(13, 1)
+shape = SubResource("CapsuleShape2D_y5kbe")
+
+[node name="HealthComponent" type="Node" parent="EnemyCharachter1"]
+script = ExtResource("5_6m7xn")
+
+[node name="Agent" type="Node2D" parent="EnemyCharachter1" node_paths=PackedStringArray("targetNode", "visionArea", "characterBody")]
+script = ExtResource("1_um7i8")
+targetNode = NodePath("../../PlayerCharachter1")
+visionArea = NodePath("../../PlayerCharachter1/VisionArea")
+characterBody = NodePath("..")
+EnableSeek = false

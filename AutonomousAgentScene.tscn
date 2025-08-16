@@ -1,12 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://crwlu1igwd1qj"]
+[gd_scene load_steps=5 format=3 uid="uid://crwlu1igwd1qj"]
 
 [ext_resource type="Script" path="res://AutonomousAgentScene.cs" id="1_uquwu"]
 [ext_resource type="Texture2D" uid="uid://d06mpr5pe82fg" path="res://icon.svg" id="2_kn2jc"]
+[ext_resource type="Script" path="res://src/Vision.cs" id="3_kp0ci"]
 
-[node name="AutonomousAgentScene" type="CharacterBody2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_h3d52"]
+radius = 238.076
+
+[node name="AutonomousAgentScene" type="CharacterBody2D" node_paths=PackedStringArray("visionArea")]
 script = ExtResource("1_uquwu")
+visionArea = NodePath("Vision")
 
 [node name="Icon" type="Sprite2D" parent="."]
-position = Vector2(4, 14)
+position = Vector2(0, -1)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_kn2jc")
+
+[node name="Vision" type="Area2D" parent="."]
+position = Vector2(0, 6)
+collision_mask = 2
+script = ExtResource("3_kp0ci")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vision"]
+position = Vector2(-8, -7)
+shape = SubResource("CircleShape2D_h3d52")
+
+[connection signal="area_entered" from="Vision" to="Vision" method="_on_area_entered"]
+[connection signal="area_exited" from="Vision" to="Vision" method="_on_area_exited"]
