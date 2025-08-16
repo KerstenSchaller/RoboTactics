@@ -5,10 +5,17 @@ namespace Behaviours
 {
     public class Wander : Behaviour
     {
+        // wanderTheta: initial angle for the wander direction; affects starting direction
         private double wanderTheta = Mathf.DegToRad(90);
+
+        // wanderDistance: how far ahead the wander circle is placed; higher = more forward
         private double wanderDistance = 150;
+
+        // wanderRadius: size of the wander circle; higher = more erratic movement
         private double wanderRadius = 90;
-        private double displacementRangeDegree = 20;
+
+        // displacementRangeDegree: max angle change per update; higher = more random turns
+        private double displacementRangeDegree = 40;
 
         private Node2D parent;
 

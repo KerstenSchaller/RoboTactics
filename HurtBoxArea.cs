@@ -20,7 +20,6 @@ public partial class HurtBoxArea : Area2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        _healthComponent.TakeDamage(5);
     }
 
     public void TakeDamage(int amount)

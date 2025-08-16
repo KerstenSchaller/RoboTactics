@@ -1,71 +1,55 @@
-[gd_scene load_steps=8 format=3 uid="uid://gc1lqe6t6vxd"]
+[gd_scene load_steps=5 format=3 uid="uid://gc1lqe6t6vxd"]
 
-[ext_resource type="Texture2D" uid="uid://d06mpr5pe82fg" path="res://icon.svg" id="1_4872r"]
-[ext_resource type="Script" path="res://AutonomousAgentScene.cs" id="1_um7i8"]
-[ext_resource type="Script" path="res://src/Vision.cs" id="2_hwkts"]
-[ext_resource type="Script" path="res://HurtBoxArea.cs" id="4_eafar"]
-[ext_resource type="Script" path="res://HealthComponent.cs" id="5_6m7xn"]
+[ext_resource type="Texture2D" uid="uid://c6nx24520n0y2" path="res://Dark-Deep-Space-4K-Wallpaper1.jpg" id="1_ue7b0"]
+[ext_resource type="Script" path="res://src/BoundaryArea.cs" id="7_h4cju"]
+[ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="8_r23gi"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_dsdun"]
-radius = 633.013
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y5kbe"]
-radius = 58.0
-height = 116.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o472q"]
+size = Vector2(3828.75, 2145)
 
 [node name="Node2D" type="Node2D"]
 
+[node name="Dark-deep-space-4k-wallpaper1" type="Sprite2D" parent="."]
+position = Vector2(256, 152)
+texture = ExtResource("1_ue7b0")
+
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(588, 319)
-zoom = Vector2(0.5, 0.5)
+position = Vector2(264, 154)
+zoom = Vector2(0.3, 0.3)
 
-[node name="PlayerCharachter1" type="CharacterBody2D" parent="."]
+[node name="BoundaryArea2D" type="Area2D" parent="."]
+position = Vector2(24, 14)
+script = ExtResource("7_h4cju")
 
-[node name="Agent" type="Node2D" parent="PlayerCharachter1" node_paths=PackedStringArray("targetNode", "visionArea", "characterBody")]
-script = ExtResource("1_um7i8")
-targetNode = NodePath("../../EnemyCharachter1")
-visionArea = NodePath("../VisionArea")
-characterBody = NodePath("..")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryArea2D"]
+position = Vector2(247, 133)
+shape = SubResource("RectangleShape2D_o472q")
 
-[node name="VisionArea" type="Area2D" parent="PlayerCharachter1"]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("2_hwkts")
+[node name="AutonomousAgentScene" parent="." instance=ExtResource("8_r23gi")]
+position = Vector2(909, 58)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCharachter1/VisionArea"]
-shape = SubResource("CircleShape2D_dsdun")
+[node name="Agent" parent="AutonomousAgentScene" index="2"]
+EnableWander = false
 
-[node name="ColorRect" type="ColorRect" parent="PlayerCharachter1"]
-offset_left = -20.0
-offset_top = -18.0
-offset_right = 20.0
-offset_bottom = 22.0
-color = Color(1, 0.458961, 0.690422, 1)
+[node name="AutonomousAgentScene2" parent="." instance=ExtResource("8_r23gi")]
+position = Vector2(560, -230)
 
-[node name="EnemyCharachter1" type="CharacterBody2D" parent="."]
-position = Vector2(963, 285)
+[node name="Agent" parent="AutonomousAgentScene2" index="2"]
+EnableWander = false
 
-[node name="Icon" type="Sprite2D" parent="EnemyCharachter1"]
-position = Vector2(14, 2)
-texture = ExtResource("1_4872r")
+[node name="AutonomousAgentScene3" parent="." instance=ExtResource("8_r23gi")]
+position = Vector2(101, -305)
 
-[node name="HurtBoxArea" type="Area2D" parent="EnemyCharachter1" node_paths=PackedStringArray("HealthComponent")]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("4_eafar")
-HealthComponent = NodePath("../HealthComponent")
+[node name="Agent" parent="AutonomousAgentScene3" index="2"]
+EnableWander = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyCharachter1/HurtBoxArea"]
-visible = false
-position = Vector2(13, 1)
-shape = SubResource("CapsuleShape2D_y5kbe")
+[node name="AutonomousAgentScene4" parent="." instance=ExtResource("8_r23gi")]
+position = Vector2(-938, 499)
 
-[node name="HealthComponent" type="Node" parent="EnemyCharachter1"]
-script = ExtResource("5_6m7xn")
+[node name="Agent" parent="AutonomousAgentScene4" index="2"]
+EnableWander = false
 
-[node name="Agent" type="Node2D" parent="EnemyCharachter1" node_paths=PackedStringArray("targetNode", "visionArea", "characterBody")]
-script = ExtResource("1_um7i8")
-targetNode = NodePath("../../PlayerCharachter1")
-visionArea = NodePath("../../PlayerCharachter1/VisionArea")
-characterBody = NodePath("..")
-EnableSeek = false
+[editable path="AutonomousAgentScene"]
+[editable path="AutonomousAgentScene2"]
+[editable path="AutonomousAgentScene3"]
+[editable path="AutonomousAgentScene4"]

@@ -20,7 +20,7 @@ public partial class HealthComponent : Node
             return;
 
         CurrentHealth -= amount;
-        GD.Print($"HealthComponent: Current Health = {CurrentHealth}");
+        //GD.Print($"HealthComponent: Current Health = {CurrentHealth}");
         if (CurrentHealth <= 0)
         {
             CurrentHealth = 0;

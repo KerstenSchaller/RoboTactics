@@ -4,7 +4,7 @@ namespace Behaviours
 {
     public abstract class Behaviour
     {
-        protected bool enabled = true;
+        protected bool enabled = false;
         public abstract Vector2 getDesiredDirectionImpl();
         public Vector2 getDesiredDirection()
         {

@@ -1,9 +1,27 @@
 using Godot;
 using System;
 
-[Tool]
 public partial class Vision : Area2D
 {
+    public Godot.Collections.Array<CharacterBody2D> GetCharacterBodiesInSight()
+    {
+        var bodies = new Godot.Collections.Array<CharacterBody2D>();
+        foreach (var body in GetOverlappingBodies())
+        {
+            if (body is CharacterBody2D cb)
+            {
+                // exclude self
+                if (cb != (CharacterBody2D)GetParent())
+                {
+                    bodies.Add(cb);
+                    GD.Print($"Overlapping Body: {body.Name}, Type: {body.GetType()}");
+
+                }
+
+             }
+        }
+        return bodies;
+    }
 
 
 
@@ -27,28 +45,26 @@ public partial class Vision : Area2D
 
     public override void _Process(double delta)
     {
-
+        GetCharacterBodiesInSight();
         int cnt = 0;
         foreach (var overlappingArea in GetOverlappingAreas())
         {
             cnt++;
-            GD.Print($"{cnt}  Overlapping Area: {overlappingArea.Name}, Type: {overlappingArea.GetType()}");
+            //GD.Print($"{cnt}  Overlapping Area: {overlappingArea.Name}, Type: {overlappingArea.GetType()}");
         }
         foreach (var overlappingBody in GetOverlappingBodies())
         {
-            GD.Print($"Overlapping Body: {overlappingBody.Name}, Type: {overlappingBody.GetType()}");
+            //GD.Print($"Overlapping Body: {overlappingBody.Name}, Type: {overlappingBody.GetType()}");
         }
     }
 
     public void _on_area_entered(Area2D area)
     {
-        GD.Print($"Area entered: {area.Name}, Type: {area.GetType()}");
         // You can add additional logic here, such as triggering a behavior or updating the state of the agent.
     }
     
         public void _on_area_exited(Area2D area)
     {
-        GD.Print($"Area exited: {area.Name}, Type: {area.GetType()}");
         // You can add additional logic here, such as triggering a behavior or updating the state of the agent.
     }
 }

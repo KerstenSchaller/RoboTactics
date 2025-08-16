@@ -19,7 +19,8 @@ class AutonomousAgent
             {
                 if(behaviour.Enabled)
                 {
-                    applyForce(behaviour.getDesiredDirection());
+                    Vector2 desired = behaviour.getDesiredDirection();
+                    applyForce(desired);
                 }
             }
             return velocity;
