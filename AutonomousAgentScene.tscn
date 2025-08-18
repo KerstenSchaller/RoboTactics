@@ -13,7 +13,7 @@ height = 116.0
 radius = 14.0357
 
 [node name="AutonomousAgentScene" type="CharacterBody2D" node_paths=PackedStringArray("visionArea")]
-scale = Vector2(0.6, 0.6)
+scale = Vector2(0.3, 0.3)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_uquwu")
@@ -23,9 +23,8 @@ EnableCohesion = true
 EnableAlignment = true
 EnableSeparation = true
 
-[node name="HurtBoxArea" type="Area2D" parent="." node_paths=PackedStringArray("HealthComponent")]
+[node name="HurtBoxArea" type="Area2D" parent="."]
 script = ExtResource("2_geqqy")
-HealthComponent = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxArea"]
 visible = false
@@ -44,7 +43,7 @@ script = ExtResource("3_kp0ci")
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionArea"]
 position = Vector2(3.33333, -238.333)
 scale = Vector2(0.1, 0.7)
-polygon = PackedVector2Array(800, -16.6666, -766.667, -21.4285, -750, 566.667, -26, 340.019, 883.333, 576.19)
+polygon = PackedVector2Array(1933.33, -235.715, -1600, -240.477, -2266.67, 697.619, -26, 340.019, 1900, 726.19)
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -20.0

@@ -8,8 +8,9 @@ namespace Behaviours
         Node2D parent;
         public float slowingRadius = 100f;
 
-        public Arrive(Node2D _target, Node2D _parent)
+        public Arrive(string name, Node2D _target, Node2D _parent)
         {
+            this.weight = new FloatParameter($"{name}.ArriveWeight", 1.0f);
             this.target = _target;
             this.parent = _parent;
         }

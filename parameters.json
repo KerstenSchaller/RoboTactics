@@ -1,0 +1,7 @@
+boidAgent.MaxSpeed=450
+boidAgent.MaxForce=3,75
+boidAgent.Mass=0,5
+boidAgent.WanderWeight=1
+boidAgent.CohesionWeight=2
+boidAgent.AlignmentWeight=2
+boidAgent.SeparationWeight=2,5

@@ -5,8 +5,15 @@ namespace Behaviours
     public abstract class Behaviour
     {
         protected bool enabled = false;
+        protected FloatParameter weight;
         public abstract Vector2 getDesiredDirectionImpl();
-        public float Weight = 1.0f;
+
+        public float Weight
+        {
+            get { return weight; }
+            set { weight.Value = value; }
+        }
+
         public Vector2 getDesiredDirection()
         {
             if (enabled)

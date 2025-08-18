@@ -2,13 +2,14 @@ using Godot;
 
 namespace Behaviours
 {
-    public class Cohesion : Behaviour
+    public class Alignment : Behaviour
     {
         private Vision vision;
         private Node2D parent;
 
-        public Cohesion(Vision vision, Node2D parent)
+        public Alignment(string name, Vision vision, Node2D parent)
         {
+            this.weight = new FloatParameter($"{name}.AlignmentWeight", 1.0f);
             this.vision = vision;
             this.parent = parent;
         }
@@ -17,23 +18,22 @@ namespace Behaviours
         {
             var neighbors = vision.GetCharacterBodiesInSight();
             if (neighbors.Count == 0)
-                return Vector2.Zero;
+                return Vector2.Inf;
 
-            Vector2 center = Vector2.Zero;
+            Vector2 avgVelocity = Vector2.Zero;
             int count = 0;
             foreach (var body in neighbors)
             {
-                if (body != parent)
+                if (body != parent && body is CharacterBody2D cb)
                 {
-                    center += body.GlobalPosition;
+                    avgVelocity += cb.Velocity;
                     count++;
                 }
             }
-            if (count == 0)
-                return Vector2.Zero;
 
-            center /= count;
-            return (center - parent.GlobalPosition);
+
+            avgVelocity /= count;
+            return avgVelocity;
         }
     }
 }

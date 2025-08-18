@@ -8,8 +8,9 @@ namespace Behaviours
         private Node2D parent;
         public float separationDistance = 60f;
 
-        public Separation(Vision vision, Node2D parent)
+        public Separation(string name, Vision vision, Node2D parent)
         {
+            this.weight = new FloatParameter($"{name}.SeparationWeight", 1.0f);
             this.vision = vision;
             this.parent = parent;
         }
@@ -18,7 +19,7 @@ namespace Behaviours
         {
             var neighbors = vision.GetCharacterBodiesInSight();
             if (neighbors.Count == 0)
-                return Vector2.Zero;
+                return Vector2.Inf;
 
             Vector2 steer = Vector2.Zero;
             int count = 0;
@@ -38,8 +39,6 @@ namespace Behaviours
                     }
                 }
             }
-            if (count == 0)
-                return Vector2.Zero;
 
             steer /= count;
             return steer;

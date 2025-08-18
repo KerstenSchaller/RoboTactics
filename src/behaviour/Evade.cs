@@ -8,8 +8,9 @@ namespace Behaviours
         Node2D parent;
         public float predictionFactor = 1.0f;
 
-        public Evade(Node2D _target, Node2D _parent)
+        public Evade(string name, Node2D _target, Node2D _parent)
         {
+            this.weight = new FloatParameter($"{name}.EvadeWeight", 1.0f);
             this.target = _target;
             this.parent = _parent;
         }

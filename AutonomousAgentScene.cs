@@ -24,26 +24,155 @@ public partial class AutonomousAgentScene : CharacterBody2D
 
     // Exported bools for each behaviour
 
+    private bool _enableSeek;
     [Export]
-    public bool EnableSeek { get; set; } = false;
+    public bool EnableSeek
+    {
+        get => _enableSeek;
+        set
+        {
+            if (_enableSeek != value)
+            {
+                _enableSeek = value;
+                SetBehaviourEnabled(BehaviourType.Seek, value);
+            }
+        }
+    }
+
+    private bool _enableFlee;
     [Export]
-    public bool EnableFlee { get; set; } = false;
+    public bool EnableFlee
+    {
+        get => _enableFlee;
+        set
+        {
+            if (_enableFlee != value)
+            {
+                _enableFlee = value;
+                SetBehaviourEnabled(BehaviourType.Flee, value);
+            }
+        }
+    }
+
+    private bool _enableCircleAround;
     [Export]
-    public bool EnableCircleAround { get; set; } = false;
+    public bool EnableCircleAround
+    {
+        get => _enableCircleAround;
+        set
+        {
+            if (_enableCircleAround != value)
+            {
+                _enableCircleAround = value;
+                SetBehaviourEnabled(BehaviourType.CircleAround, value);
+            }
+        }
+    }
+
+    private bool _enableWander;
     [Export]
-    public bool EnableWander { get; set; } = false;
+    public bool EnableWander
+    {
+        get => _enableWander;
+        set
+        {
+            if (_enableWander != value)
+            {
+                _enableWander = value;
+                SetBehaviourEnabled(BehaviourType.Wander, value);
+            }
+        }
+    }
+
+    private bool _enableArrive;
     [Export]
-    public bool EnableArrive { get; set; } = false;
+    public bool EnableArrive
+    {
+        get => _enableArrive;
+        set
+        {
+            if (_enableArrive != value)
+            {
+                _enableArrive = value;
+                SetBehaviourEnabled(BehaviourType.Arrive, value);
+            }
+        }
+    }
+
+    private bool _enablePursue;
     [Export]
-    public bool EnablePursue { get; set; } = false;
+    public bool EnablePursue
+    {
+        get => _enablePursue;
+        set
+        {
+            if (_enablePursue != value)
+            {
+                _enablePursue = value;
+                SetBehaviourEnabled(BehaviourType.Pursue, value);
+            }
+        }
+    }
+
+    private bool _enableEvade;
     [Export]
-    public bool EnableEvade { get; set; } = false;
+    public bool EnableEvade
+    {
+        get => _enableEvade;
+        set
+        {
+            if (_enableEvade != value)
+            {
+                _enableEvade = value;
+                SetBehaviourEnabled(BehaviourType.Evade, value);
+            }
+        }
+    }
+
+    private bool _enableCohesion;
     [Export]
-    public bool EnableCohesion { get; set; } = false;
+    public bool EnableCohesion
+    {
+        get => _enableCohesion;
+        set
+        {
+            if (_enableCohesion != value)
+            {
+                _enableCohesion = value;
+                SetBehaviourEnabled(BehaviourType.Cohesion, value);
+            }
+        }
+    }
+
+    private bool _enableAlignment;
     [Export]
-    public bool EnableAlignment { get; set; } = false;
+    public bool EnableAlignment
+    {
+        get => _enableAlignment;
+        set
+        {
+            if (_enableAlignment != value)
+            {
+                _enableAlignment = value;
+                SetBehaviourEnabled(BehaviourType.Alignment, value);
+            }
+        }
+    }
+
+    private bool _enableSeparation;
     [Export]
-    public bool EnableSeparation { get; set; } = false;
+    public bool EnableSeparation
+    {
+        get => _enableSeparation;
+        set
+        {
+            if (_enableSeparation != value)
+            {
+                _enableSeparation = value;
+                SetBehaviourEnabled(BehaviourType.Separation, value);
+            }
+        }
+    }
 
     // Behaviour instances
     private Behaviours.Seek seekBehaviour;
@@ -59,28 +188,30 @@ public partial class AutonomousAgentScene : CharacterBody2D
 
     public override void _Ready()
     {
-        autonomousAgent = new AutonomousAgent(300.0f, 300/(2*60), 0.5f);
-       
+        float speed = 450.0f;
+        int secondsTillFullSpeed = 2;
+        autonomousAgent = new AutonomousAgent("boidAgent",speed, speed/(secondsTillFullSpeed*60), 0.5f);
+
         // Instantiate all behaviours
-        seekBehaviour = new Behaviours.Seek(targetNode, this);
-        fleeBehaviour = new Behaviours.Flee(targetNode, this);
-        circleAroundBehaviour = new Behaviours.CircleAround(targetNode, this);
-        wanderBehaviour = new Behaviours.Wander(targetNode, this);
-        arriveBehaviour = new Behaviours.Arrive(targetNode, this);
-        pursueBehaviour = new Behaviours.Pursue(targetNode, this);
-        evadeBehaviour = new Behaviours.Evade(targetNode, this);
-        cohesionBehaviour = new Behaviours.Cohesion(visionArea as Vision, this);
-        alignmentBehaviour = new Behaviours.Alignment(visionArea as Vision, this);
-        separationBehaviour = new Behaviours.Separation(visionArea as Vision, this);
+        //seekBehaviour = new Behaviours.Seek(targetNode, this);
+        //fleeBehaviour = new Behaviours.Flee(targetNode, this);
+        //circleAroundBehaviour = new Behaviours.CircleAround(targetNode, this);
+        wanderBehaviour = new Behaviours.Wander("boidAgent",targetNode, this);
+        //arriveBehaviour = new Behaviours.Arrive(targetNode, this);
+        //pursueBehaviour = new Behaviours.Pursue(targetNode, this);
+        //evadeBehaviour = new Behaviours.Evade(targetNode, this);
+        cohesionBehaviour = new Behaviours.Cohesion("boidAgent", visionArea as Vision, this);
+        alignmentBehaviour = new Behaviours.Alignment("boidAgent", visionArea as Vision, this);
+        separationBehaviour = new Behaviours.Separation("boidAgent", visionArea as Vision, this);
 
         // Add all behaviours to the agent
-        autonomousAgent.addBehaviour(seekBehaviour);
-        autonomousAgent.addBehaviour(fleeBehaviour);
-        autonomousAgent.addBehaviour(circleAroundBehaviour);
+        //autonomousAgent.addBehaviour(seekBehaviour);
+        //autonomousAgent.addBehaviour(fleeBehaviour);
+        //autonomousAgent.addBehaviour(circleAroundBehaviour);
         autonomousAgent.addBehaviour(wanderBehaviour);
-        autonomousAgent.addBehaviour(arriveBehaviour);
-        autonomousAgent.addBehaviour(pursueBehaviour);
-        autonomousAgent.addBehaviour(evadeBehaviour);
+        //autonomousAgent.addBehaviour(arriveBehaviour);
+        //autonomousAgent.addBehaviour(pursueBehaviour);
+        //autonomousAgent.addBehaviour(evadeBehaviour);
         autonomousAgent.addBehaviour(cohesionBehaviour);
         autonomousAgent.addBehaviour(alignmentBehaviour);
         autonomousAgent.addBehaviour(separationBehaviour);
@@ -91,13 +222,13 @@ public partial class AutonomousAgentScene : CharacterBody2D
         separationBehaviour.Weight = 2.5f;
 
         // Set enabled state from exported bools
-        SetBehaviourEnabled(BehaviourType.Seek, EnableSeek);
-        SetBehaviourEnabled(BehaviourType.Flee, EnableFlee);
-        SetBehaviourEnabled(BehaviourType.CircleAround, EnableCircleAround);
+       // SetBehaviourEnabled(BehaviourType.Seek, EnableSeek);
+        //SetBehaviourEnabled(BehaviourType.Flee, EnableFlee);
+        //SetBehaviourEnabled(BehaviourType.CircleAround, EnableCircleAround);
         SetBehaviourEnabled(BehaviourType.Wander, EnableWander);
-        SetBehaviourEnabled(BehaviourType.Arrive, EnableArrive);
-        SetBehaviourEnabled(BehaviourType.Pursue, EnablePursue);
-        SetBehaviourEnabled(BehaviourType.Evade, EnableEvade);
+        //SetBehaviourEnabled(BehaviourType.Arrive, EnableArrive);
+        //SetBehaviourEnabled(BehaviourType.Pursue, EnablePursue);
+        //SetBehaviourEnabled(BehaviourType.Evade, EnableEvade);
         SetBehaviourEnabled(BehaviourType.Cohesion, EnableCohesion);
         SetBehaviourEnabled(BehaviourType.Alignment, EnableAlignment);
         SetBehaviourEnabled(BehaviourType.Separation, EnableSeparation);
@@ -119,11 +250,12 @@ public partial class AutonomousAgentScene : CharacterBody2D
     {
         if( autonomousAgent == null)
         {
-            GD.PrintErr($"[{nameof(AutonomousAgentScene)}] ({nameof(_Process)}): AutonomousAgent is not set. File: {nameof(AutonomousAgentScene)}.cs");
+            //GD.PrintErr($"[{nameof(AutonomousAgentScene)}] ({nameof(_Process)}): AutonomousAgent is not set. File: {nameof(AutonomousAgentScene)}.cs");
             return;
         }
         Velocity = autonomousAgent.Velocity;
         this.Rotation = Velocity.Angle()+90f;
+        GD.Print($"Velocity: {Velocity.Length()}");
         MoveAndSlide();
     }
 

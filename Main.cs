@@ -17,7 +17,7 @@ public partial class Main : Node2D
             return;
         }
 
-        for (int i = 0; i < 80; i++)
+        for (int i = 0; i < 60; i++)
         {
             InstantiateAgent(i);
         }
