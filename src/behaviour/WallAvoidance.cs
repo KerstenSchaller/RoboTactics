@@ -24,10 +24,8 @@ namespace Behaviours
         {
             Vector2 steer = Vector2.Zero;
             int count = 0;
-            avoidDistance = vision.VisionRadius;
+            avoidDistance = vision.VisionRadius.Value;
 
-            // Use Physics2DDirectSpaceState for a one-off raycast
-            var spaceState = parent.GetWorld2D().DirectSpaceState;
             Vector2 from = parent.GlobalPosition;
             Vector2 to = from + Vector2.Right.Rotated(parent.Rotation) * avoidDistance;
 
@@ -36,13 +34,8 @@ namespace Behaviours
             debugLine.DefaultColor = new Color(0, 1, 0); // Green
             debugLine.Points = new Vector2[] { parent.ToLocal(from), parent.ToLocal(to) };
 
-            var query = new Godot.PhysicsRayQueryParameters2D
-            {
-                From = from,
-                To = to,
-                CollisionMask = 2 // Only detect bodies on layer 2
-            };
-            var result = spaceState.IntersectRay(query);
+            // Use Vision's Raycast method
+            var result = vision.Raycast(from, to, 2);
 
 
 

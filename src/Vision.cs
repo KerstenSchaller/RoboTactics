@@ -5,9 +5,24 @@ using PersistentParameter;
 // For FloatParameter alias
 using static PersistentParameter.ParameterRegistry;
 
-[Tool]
-public partial class Vision : Area2D
-{
+    [Tool]
+    public partial class Vision : Area2D
+    {
+        /// <summary>
+        /// Performs a raycast from 'from' to 'to' using the given collision mask.
+        /// Returns the result dictionary from IntersectRay.
+        /// </summary>
+        public Godot.Collections.Dictionary Raycast(Vector2 from, Vector2 to, uint collisionMask = 2)
+        {
+            var spaceState = GetWorld2D().DirectSpaceState;
+            var query = new Godot.PhysicsRayQueryParameters2D
+            {
+                From = from,
+                To = to,
+                CollisionMask = collisionMask
+            };
+            return spaceState.IntersectRay(query);
+        }
     public Godot.Collections.Array<StaticBody2D> GetStaticBodiesInSight()
     {
         var bodies = new Godot.Collections.Array<StaticBody2D>();
