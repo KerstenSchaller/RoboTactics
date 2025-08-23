@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://delbdku3cu7ht"]
+
+[ext_resource type="Script" path="res://OptionsGui/FloatEdit.cs" id="1_rtl2f"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_qsvhv"]
+font_size = 12
+
+[node name="FloatEdit" type="HFlowContainer"]
+offset_right = 498.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+script = ExtResource("1_rtl2f")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Test"
+label_settings = SubResource("LabelSettings_qsvhv")
+
+[node name="ValueLineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "XXXX"
+
+[node name="HSlider" type="HSlider" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.1
+ticks_on_borders = true

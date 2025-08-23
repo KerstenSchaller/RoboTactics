@@ -9,7 +9,7 @@ namespace Behaviours
 
         public Cohesion(string name, Vision vision, Node2D parent)
         {
-            this.weight = new FloatParameter($"{name}.CohesionWeight", 1.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.CohesionWeight", 1.0f, 0, 10);
             this.vision = vision;
             this.parent = parent;
         }

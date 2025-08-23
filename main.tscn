@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://gc1lqe6t6vxd"]
+[gd_scene load_steps=10 format=3 uid="uid://gc1lqe6t6vxd"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_u7wvr"]
 [ext_resource type="Texture2D" uid="uid://c6nx24520n0y2" path="res://Dark-Deep-Space-4K-Wallpaper1.jpg" id="1_ue7b0"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://tools/PathDrawer.cs" id="6_rhrhl"]
 [ext_resource type="Script" path="res://tools/BoundaryArea.cs" id="7_h4cju"]
 [ext_resource type="Texture2D" uid="uid://d06mpr5pe82fg" path="res://icon.svg" id="7_pyxjq"]
+[ext_resource type="PackedScene" uid="uid://d32flxndj0l1m" path="res://OptionsGui/ParameterEditorWindow.tscn" id="8_21bvg"]
 [ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="8_r23gi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o472q"]
@@ -29,10 +30,6 @@ shape = SubResource("RectangleShape2D_o472q")
 [node name="AutonomousAgentScene" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("8_r23gi")]
 position = Vector2(-826, -439)
 targetNode = NodePath("../Icon")
-EnableWander = true
-EnableCohesion = true
-EnableAlignment = true
-EnableSeparation = true
 
 [node name="AutonomousAgentScene2" parent="." instance=ExtResource("8_r23gi")]
 position = Vector2(1359, 742)
@@ -55,3 +52,5 @@ texture = ExtResource("7_pyxjq")
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(288, 144)
 zoom = Vector2(0.3, 0.3)
+
+[node name="ParameterEditorWindow" parent="." instance=ExtResource("8_21bvg")]

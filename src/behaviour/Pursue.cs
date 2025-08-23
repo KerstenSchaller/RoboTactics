@@ -10,7 +10,7 @@ namespace Behaviours
 
         public Pursue(string name, Node2D _target, Node2D _parent)
         {
-            this.weight = new FloatParameter($"{name}.PursueWeight", 1.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.PursueWeight", 1.0f, 0, 10);
             this.target = _target;
             this.parent = _parent;
         }

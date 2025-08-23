@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+
 namespace Behaviours
 {
     public class Wander : Behaviour
@@ -21,7 +22,7 @@ namespace Behaviours
 
         public Wander(string name, Node2D _target, Node2D _parent)
         {
-            this.weight = new FloatParameter($"{name}.WanderWeight", 1.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.WanderWeight", 1.0f, 0.0f, 10.0f);
             this.parent = _parent;
         }
 

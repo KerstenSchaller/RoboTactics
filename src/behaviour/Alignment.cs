@@ -1,4 +1,6 @@
 using Godot;
+using PersistentParameter;
+
 
 namespace Behaviours
 {
@@ -9,7 +11,7 @@ namespace Behaviours
 
         public Alignment(string name, Vision vision, Node2D parent)
         {
-            this.weight = new FloatParameter($"{name}.AlignmentWeight", 1.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.AlignmentWeight", 1.0f, 0, 10);
             this.vision = vision;
             this.parent = parent;
         }

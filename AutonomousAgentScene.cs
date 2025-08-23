@@ -240,11 +240,7 @@ public partial class AutonomousAgentScene : CharacterBody2D
         autonomousAgent.addBehaviour(behaviour);
     }
 
-    // Configure agent parameters at runtime
-    public void ConfigureAgent(float maxSpeed, float maxForce, float mass)
-    {
-        autonomousAgent.ConfigureAgent(maxSpeed, maxForce, mass);
-    }
+
 
     public override void _PhysicsProcess(double delta)
     {
@@ -255,7 +251,7 @@ public partial class AutonomousAgentScene : CharacterBody2D
         }
         Velocity = autonomousAgent.Velocity;
         this.Rotation = Velocity.Angle()+90f;
-        GD.Print($"Velocity: {Velocity.Length()}");
+        //GD.Print($"Velocity: {Velocity.Length()}");
         MoveAndSlide();
     }
 

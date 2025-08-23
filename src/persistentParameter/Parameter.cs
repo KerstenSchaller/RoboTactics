@@ -2,83 +2,100 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-namespace PersistentParameter;
-
-public class Parameter<T>
+namespace PersistentParameter
 {
-    public string Name { get; }
-    private T _value;
-
-    public Parameter(string name, T defaultValue = default!)
+    public interface IParameter
     {
-        Name = name;
-
-        // Register first
-        ParameterRegistry.Register(this);
-
-        // Load stored value if exists, otherwise use default
-        if (ParameterRegistry.TryLoad(Name, out T storedValue))
-        {
-            _value = storedValue;
-            GD.Print($"[LOAD] {Name} = {_value}");
-        }
-        else
-        {
-            _value = defaultValue;
-            Save(); // Save initial value
-        }
+        string Name { get; }
+        Type ValueType { get; }
+        object GetValue();
+        void SetValue(object value);
     }
 
-    public T Value
+    public class Parameter<T> : IParameter
     {
-        get => _value;
-        set
+        public T Min { get; }
+        public T Max { get; }
+        public string Name { get; }
+        private T _value;
+        public Type ValueType => typeof(T);
+
+        public object GetValue() => _value!;
+
+        public void SetValue(object value)
         {
-            if (!EqualityComparer<T>.Default.Equals(_value, value))
+            _value = (T)Convert.ChangeType(value, typeof(T));
+            Save();
+        }
+
+        // Make constructor internal so only registry can call it
+        internal Parameter(string name, T defaultValue, T min, T max)
+        {
+            Name = name;
+            Min = min;
+            Max = max;
+
+            if (ParameterRegistry.TryLoad(Name, out T storedValue))
             {
-                _value = value;
+                _value = storedValue;
+                GD.Print($"[LOAD] {Name} = {_value}");
+            }
+            else
+            {
+                _value = defaultValue;
+                GD.Print($"[DEFAULT] {Name} = {_value}");
                 Save();
             }
         }
-    }
 
-    private void Save()
-    {
-        ParameterRegistry.StoreAndPersist(Name, _value);
-        GD.Print($"[SAVE] {Name} = {_value}");
-    }
+        public T Value
+        {
+            get => _value;
+            set
+            {
+                if (!EqualityComparer<T>.Default.Equals(_value, value))
+                {
+                    _value = value;
+                    GD.Print($"[EXTSAVE] {Name} = {_value}");
+                    Save();
+                }
+            }
+        }
 
-    public override string ToString() => $"{Name}={_value}";
+        private void Save()
+        {
+            ParameterRegistry.StoreAndPersist(Name, _value);
+            GD.Print($"[SAVE] {Name} = {_value}");
+        }
 
-    // Implicit conversion to underlying type
-    public static implicit operator T(Parameter<T> param) => param._value;
+        public override string ToString() => $"{Name}={_value}";
 
-    // Optional: only for numeric types, we can define operator overloads
-    public static Parameter<T> operator +(Parameter<T> param, T value)
-    {
-        dynamic current = param._value;
-        param.Value = current + (dynamic)value;
-        return param;
-    }
+        public static implicit operator T(Parameter<T> param) => param._value;
 
-    public static Parameter<T> operator -(Parameter<T> param, T value)
-    {
-        dynamic current = param._value;
-        param.Value = current - (dynamic)value;
-        return param;
-    }
-
-    public static Parameter<T> operator *(Parameter<T> param, T value)
-    {
-        dynamic current = param._value;
-        param.Value = current * (dynamic)value;
-        return param;
-    }
-
-    public static Parameter<T> operator /(Parameter<T> param, T value)
-    {
-        dynamic current = param._value;
-        param.Value = current / (dynamic)value;
-        return param;
+        // Operator overloads remain unchanged...
+        public static Parameter<T> operator +(Parameter<T> param, T value)
+        {
+            dynamic current = param._value;
+            param.Value = current + (dynamic)value;
+            return param;
+        }
+        public static Parameter<T> operator -(Parameter<T> param, T value)
+        {
+            dynamic current = param._value;
+            param.Value = current - (dynamic)value;
+            return param;
+        }
+        public static Parameter<T> operator *(Parameter<T> param, T value)
+        {
+            dynamic current = param._value;
+            param.Value = current * (dynamic)value;
+            return param;
+        }
+        public static Parameter<T> operator /(Parameter<T> param, T value)
+        {
+            dynamic current = param._value;
+            param.Value = current / (dynamic)value;
+            return param;
+        }
     }
 }

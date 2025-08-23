@@ -8,7 +8,7 @@ namespace Behaviours
         Node2D parent;
         public CircleAround(string name, Node2D _target, Node2D _parent)
         {
-            this.weight = new FloatParameter($"{name}.CircleAroundWeight", 1.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.CircleAroundWeight", 1.0f, 0, 10);
             this.target = _target;
             this.parent = _parent;
         }

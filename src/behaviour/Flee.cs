@@ -8,7 +8,7 @@ namespace Behaviours
         Node2D parent;
         public Flee(string name, Node2D _target, Node2D _parent)
         {
-            this.weight = new FloatParameter($"{name}.FleeWeight", 1.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.FleeWeight", 1.0f, 0, 10);
             this.target = _target;
             this.parent = _parent;
         }
