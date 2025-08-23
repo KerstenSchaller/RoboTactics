@@ -16,19 +16,21 @@ class AutonomousAgent
         get
         {
             acceleration = new Vector2();
-            foreach(var behaviour in behaviours)
+            float weightCount = 0;
+            foreach (var behaviour in behaviours)
             {
-                if(behaviour.Enabled)
+                if (behaviour.Enabled)
                 {
                     Vector2 desired = behaviour.getDesiredDirection();
-                    if(desired != Vector2.Inf)
+                    if (desired != Vector2.Inf)
                     {
                         // only if valid desired direction
                         applyForce(desired, behaviour.Weight);
+                        weightCount += behaviour.Weight;
                     }
                 }
             }
-            velocity += acceleration;
+            velocity += acceleration / weightCount;
             if (velocity.Length() > maxSpeed)
             {
                 velocity = velocity.Normalized() * maxSpeed;

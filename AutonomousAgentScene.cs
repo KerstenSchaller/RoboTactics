@@ -265,7 +265,8 @@ public partial class AutonomousAgentScene : CharacterBody2D
         }
         Velocity = autonomousAgent.Velocity;
         this.Rotation = Velocity.Angle();
-        MoveAndSlide();
+        this.Position += Velocity * (float)delta;
+        //MoveAndSlide();
     }
 
     // Set behaviour enabled state by name, can be called from outside code

@@ -1,36 +1,31 @@
-[gd_scene load_steps=12 format=3 uid="uid://gc1lqe6t6vxd"]
+[gd_scene load_steps=13 format=3 uid="uid://gc1lqe6t6vxd"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_u7wvr"]
 [ext_resource type="Texture2D" uid="uid://c6nx24520n0y2" path="res://Dark-Deep-Space-4K-Wallpaper1.jpg" id="1_ue7b0"]
 [ext_resource type="Script" path="res://tools/ConnectionTool.cs" id="4_w5lbw"]
 [ext_resource type="Script" path="res://tools/CollisionShapeDrawer.cs" id="5_h108h"]
 [ext_resource type="Script" path="res://tools/PathDrawer.cs" id="6_rhrhl"]
-[ext_resource type="Script" path="res://tools/BoundaryArea.cs" id="7_h4cju"]
 [ext_resource type="Texture2D" uid="uid://d06mpr5pe82fg" path="res://icon.svg" id="7_pyxjq"]
 [ext_resource type="PackedScene" uid="uid://d32flxndj0l1m" path="res://OptionsGui/ParameterEditorWindow.tscn" id="8_21bvg"]
 [ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="8_r23gi"]
+[ext_resource type="Script" path="res://ControllableCamera2d.cs" id="9_uy43k"]
 [ext_resource type="PackedScene" uid="uid://bcvus2mbdtnbi" path="res://Obstacle.tscn" id="10_n6q06"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_o472q"]
-size = Vector2(3828.75, 2145)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fn6yg"]
+size = Vector2(903, 10365)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vui4y"]
+size = Vector2(20472, 544.5)
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_u7wvr")
 
-[node name="Dark-deep-space-4k-wallpaper1" type="Sprite2D" parent="."]
+[node name="Background" type="Sprite2D" parent="."]
 position = Vector2(256, 152)
+scale = Vector2(5, 5)
 texture = ExtResource("1_ue7b0")
 
-[node name="BoundaryArea2D" type="Area2D" parent="."]
-position = Vector2(24, 14)
-script = ExtResource("7_h4cju")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryArea2D"]
-position = Vector2(247, 133)
-shape = SubResource("RectangleShape2D_o472q")
-
 [node name="AutonomousAgentScene" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("8_r23gi")]
-visible = false
 position = Vector2(1638, 93.0001)
 targetNode = NodePath("../AutonomousAgentScene2")
 EnableCohesion = false
@@ -38,7 +33,7 @@ EnableAlignment = false
 EnableSeparation = false
 
 [node name="AutonomousAgentScene2" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("8_r23gi")]
-position = Vector2(676, 818)
+position = Vector2(1071, 154)
 targetNode = NodePath("../AutonomousAgentScene")
 
 [node name="CollisionShapeDrawer" type="Node2D" parent="AutonomousAgentScene2"]
@@ -64,18 +59,46 @@ position = Vector2(349, 879)
 texture = ExtResource("7_pyxjq")
 
 [node name="ParameterEditorWindow" parent="." instance=ExtResource("8_21bvg")]
+position = Vector2i(0, 36)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(236, 146)
 zoom = Vector2(0.3, 0.3)
-
-[node name="Obstacle4" parent="." instance=ExtResource("10_n6q06")]
-position = Vector2(-1089, -374)
-
-[node name="CollisionPolygon2D" parent="Obstacle4" index="0"]
-polygon = PackedVector2Array(3031, -292, 3076, 1473, -358, 1422, -386, -389, 2974, -417, 2906, -332, -318, -338, -290, 1314, 2969, 1382, 2975, -417)
+script = ExtResource("9_uy43k")
 
 [node name="Obstacle" parent="." instance=ExtResource("10_n6q06")]
-position = Vector2(1935, -797)
+position = Vector2(-872, -426)
 
-[editable path="Obstacle4"]
+[node name="Obstacle2" parent="." instance=ExtResource("10_n6q06")]
+position = Vector2(-444, 543)
+
+[node name="Obstacle3" parent="." instance=ExtResource("10_n6q06")]
+position = Vector2(1430, -498)
+
+[node name="Obstacle4" parent="." instance=ExtResource("10_n6q06")]
+position = Vector2(1687, 807)
+
+[node name="Obstacle5" parent="." instance=ExtResource("10_n6q06")]
+position = Vector2(326, 80)
+
+[node name="Boundary" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundary"]
+position = Vector2(-9373, 167)
+shape = SubResource("RectangleShape2D_fn6yg")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundary"]
+position = Vector2(9930, 116)
+shape = SubResource("RectangleShape2D_fn6yg")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Boundary"]
+position = Vector2(311, 5483.25)
+shape = SubResource("RectangleShape2D_vui4y")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Boundary"]
+position = Vector2(362, -5235)
+shape = SubResource("RectangleShape2D_vui4y")
+
+[editable path="Obstacle5"]

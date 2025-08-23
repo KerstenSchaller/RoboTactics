@@ -5,33 +5,81 @@ using PersistentParameter;
 // For FloatParameter alias
 using static PersistentParameter.ParameterRegistry;
 
-    [Tool]
-    public partial class Vision : Area2D
+[Tool]
+public partial class Vision : Area2D
+{
+    // List to store raycast lines for drawing
+    private System.Collections.Generic.List<(Vector2 from, Vector2 to)> _raycastLines = new System.Collections.Generic.List<(Vector2, Vector2)>();
+    public Godot.Collections.Array<Godot.Collections.Dictionary> Raycast(Vector2 from, Vector2 to, uint collisionMask = 2)
     {
-        /// <summary>
-        /// Performs a raycast from 'from' to 'to' using the given collision mask.
-        /// Returns the result dictionary from IntersectRay.
-        /// </summary>
-        public Godot.Collections.Dictionary Raycast(Vector2 from, Vector2 to, uint collisionMask = 2)
+        // Cover the same arc as the procedural vision polygon with 11 rays
+        var spaceState = GetWorld2D().DirectSpaceState;
+        float radius = VisionRadius.Value;
+        float rearAngle = Mathf.DegToRad(RearCutoutAngleDeg.Value);
+        float startAngle = rearAngle / 2f + Mathf.Pi; // Rotate 180 degrees
+        float endAngle = 2f * Mathf.Pi - rearAngle / 2f + Mathf.Pi; // Rotate 180 degrees
+        int rayCount = 11;
+        var results = new Godot.Collections.Array<Godot.Collections.Dictionary>();
+
+        // Get the global rotation of the Area2D node
+        float globalRotation = GlobalRotation;
+
+        for (int i = 0; i < rayCount; i++)
         {
-            var spaceState = GetWorld2D().DirectSpaceState;
+            float t = (float)i / (rayCount - 1);
+            float angle = Mathf.Lerp(startAngle, endAngle, t);
+            // Apply the node's rotation to the angle
+            float rotatedAngle = angle + globalRotation;
+            Vector2 dir = new Vector2(Mathf.Cos(rotatedAngle), Mathf.Sin(rotatedAngle));
+            Vector2 rayTo = from + dir * radius * GlobalTransform.Scale.X;
             var query = new Godot.PhysicsRayQueryParameters2D
             {
                 From = from,
-                To = to,
-                CollisionMask = collisionMask
+                To = rayTo,
+                CollisionMask = collisionMask,
+                Exclude = new Godot.Collections.Array<Rid> { GetRid() }
             };
-            return spaceState.IntersectRay(query);
+            var hit = spaceState.IntersectRay(query);
+            if (hit.Count > 0)
+            {
+                // Only add if collider is StaticBody2D
+                if (hit.ContainsKey("collider"))
+                {
+                    var collider = hit["collider"];
+                    if (!collider.Equals(null) && collider.ToString().Contains("StaticBody2D"))
+                    {
+                        results.Add(hit);
+                        // Add the line to the list for drawing
+                        _raycastLines.Add((from, rayTo));
+                    }
+
+                }
+            }
         }
+
+
+
+        return results;
+    }
+
+    public override void _Draw()
+    {
+        return;
+        // Draw all raycast lines
+        foreach (var (from, to) in _raycastLines)
+        {
+            DrawLine(ToLocal(from), ToLocal(to), new Color(1, 0, 0), 2);
+        }
+        // Clear the list after drawing
+        _raycastLines.Clear();
+    }
     public Godot.Collections.Array<StaticBody2D> GetStaticBodiesInSight()
     {
         var bodies = new Godot.Collections.Array<StaticBody2D>();
-        GD.Print($"Static Bodies in Sight:");
         foreach (var body in GetOverlappingBodies())
         {
             if (body is StaticBody2D sb)
             {
-                GD.Print($"Static Body in Sight: {sb.Name}");
                 bodies.Add(sb);
             }
         }
@@ -52,7 +100,7 @@ using static PersistentParameter.ParameterRegistry;
     {
         var bodies = new Godot.Collections.Array<CharacterBody2D>();
         foreach (var body in GetOverlappingBodies())
-        { 
+        {
             if (body is CharacterBody2D cb)
             {
                 // exclude self
@@ -162,6 +210,9 @@ using static PersistentParameter.ParameterRegistry;
                 _lastRearCutoutAngleDeg = currentRearAngle;
             }
         }
+        // Request redraw every frame if there are lines to draw
+        if (_raycastLines.Count > 0)
+            QueueRedraw();
     }
 
     public void _on_area_entered(Area2D area)

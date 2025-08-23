@@ -16,10 +16,8 @@ namespace Behaviours
             this.vision = vision;
             this.parent = parent;
             
-            parent.AddChild(debugLine);
         }
 
-        Line2D debugLine = new Line2D();
         public override Vector2 getDesiredDirectionImpl()
         {
             Vector2 steer = Vector2.Zero;
@@ -29,29 +27,27 @@ namespace Behaviours
             Vector2 from = parent.GlobalPosition;
             Vector2 to = from + Vector2.Right.Rotated(parent.Rotation) * avoidDistance;
 
-            // Create a Line2D to visualize the raycast
-            debugLine.Width = 2;
-            debugLine.DefaultColor = new Color(0, 1, 0); // Green
-            debugLine.Points = new Vector2[] { parent.ToLocal(from), parent.ToLocal(to) };
-
+        
             // Use Vision's Raycast method
             var result = vision.Raycast(from, to, 2);
 
 
-
-            if (result.Count > 0 && result.ContainsKey("position"))
+            foreach (var hit in result)
             {
-                Vector2 collisionPoint = (Vector2)result["position"];
-                lastClosestWorldPoint = collisionPoint;
-                Vector2 toWall = collisionPoint - parent.GlobalPosition;
-                float dist = toWall.Length();
-
-                if (dist < avoidDistance)
+                if (hit.Count > 0 && hit.ContainsKey("position"))
                 {
-                    steer -= toWall.Normalized() * (avoidDistance - dist) / avoidDistance;
-                    steer -= toWall.Normalized();
-                    count++;
-                    GD.Print($"[WallAvoidance] Steering adjustment applied. Steer: {steer}");
+                    Vector2 collisionPoint = (Vector2)hit["position"];
+                    lastClosestWorldPoint = collisionPoint;
+                    Vector2 toWall = collisionPoint - parent.GlobalPosition;
+                    float dist = toWall.Length();
+
+                    if (dist < avoidDistance)
+                    {
+                        steer -= toWall.Normalized() * (avoidDistance - dist) / avoidDistance;
+                        steer -= toWall.Normalized();
+                        count++;
+
+                    }
                 }
             }
 
@@ -94,14 +90,5 @@ namespace Behaviours
             return a + ab * t;
         }
 
-        // Call this from your agent's _Draw() method
-        public void DrawClosestPoint()
-        {
-            if (lastClosestWorldPoint.HasValue)
-            {
-                // Draw a red circle at the closest point
-                parent.DrawCircle(parent.ToLocal(lastClosestWorldPoint.Value), 8, new Color(1, 0, 0));
-            }
-        }
     }
 }
