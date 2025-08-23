@@ -42,9 +42,7 @@ namespace PersistentParameter
             }
             else
             {
-                _value = defaultValue;
-                GD.Print($"[DEFAULT] {Name} = {_value}");
-                Save();
+                GD.PrintErr($"[DEFAULT] {Name} = {defaultValue}");
             }
         }
 
@@ -58,6 +56,10 @@ namespace PersistentParameter
                     _value = value;
                     GD.Print($"[EXTSAVE] {Name} = {_value}");
                     Save();
+                }
+                else
+                {
+                    GD.Print($"[NOCHANGE] {Name} remains {_value}");
                 }
             }
         }

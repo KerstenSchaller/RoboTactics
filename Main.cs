@@ -17,7 +17,7 @@ public partial class Main : Node2D
             return;
         }
 
-        for (int i = 0; i < 60; i++)
+        for (int i = 0; i < 0; i++)
         {
             InstantiateAgent(i);
         }
@@ -44,10 +44,8 @@ public partial class Main : Node2D
         }
         AddChild(agentInstance);
     }
-    
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
-    }
+
+
+
 }

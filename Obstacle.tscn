@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcvus2mbdtnbi"]
+
+[ext_resource type="Script" path="res://src/ObstaclePolygon.cs" id="1_6joov"]
+
+[node name="Obstacle" type="StaticBody2D"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-2, 1)
+polygon = PackedVector2Array(118, -68, 149, 74, -122, 85, -58, -148)
+script = ExtResource("1_6joov")

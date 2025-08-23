@@ -13,17 +13,19 @@ height = 116.0
 radius = 14.0357
 
 [node name="AutonomousAgentScene" type="CharacterBody2D" node_paths=PackedStringArray("visionArea")]
-scale = Vector2(0.3, 0.3)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_uquwu")
 visionArea = NodePath("VisionArea")
+EnableWallAvoidance = true
 EnableWander = true
 EnableCohesion = true
 EnableAlignment = true
 EnableSeparation = true
 
 [node name="HurtBoxArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("2_geqqy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxArea"]
@@ -37,20 +39,29 @@ script = ExtResource("3_28g8f")
 [node name="VisionArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 2
-monitorable = false
 script = ExtResource("3_kp0ci")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionArea"]
-position = Vector2(3.33333, -238.333)
-scale = Vector2(0.1, 0.7)
-polygon = PackedVector2Array(1933.33, -235.715, -1600, -240.477, -2266.67, 697.619, -26, 340.019, 1900, 726.19)
+UseProceduralVisionShape = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -20.0
-offset_top = -18.0
+offset_top = -23.0
 offset_right = 20.0
 offset_bottom = 22.0
 color = Color(1, 0.458961, 0.690422, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.0666666
+anchor_bottom = 0.0666666
+offset_left = 40.0
+offset_top = 10.0
+offset_right = 100.0
+offset_bottom = 33.0
+rotation = 0.0245422
+color = Color(1, 0.458961, 0.690422, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="PhysicsCollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_utokv")

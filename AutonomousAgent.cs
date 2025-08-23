@@ -47,7 +47,6 @@ class AutonomousAgent
 
     public AutonomousAgent(string name,float _maxSpeed, float _maxForce, float _mass)
     {
-        GD.Print($"[CREATE] {name}");
         maxSpeed = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxSpeed", _maxSpeed,0,600);
         maxForce = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxForce", _maxForce/(2*60),0,50);
         mass = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.Mass", _mass,0,100);
@@ -83,7 +82,6 @@ class AutonomousAgent
     public void applyForce(Vector2 desired, float Weight)
     {
         var steering = desired.Normalized()*maxSpeed - velocity;
-        GD.Print($"[MAxspeed {maxSpeed}");
         steering = (steering.Length() >= maxForce) ? steering.Normalized()*maxForce:steering;
 
         acceleration += (steering/mass)*Weight;

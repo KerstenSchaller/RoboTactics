@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://d32flxndj0l1m"]
 
 [ext_resource type="Script" path="res://OptionsGui/ParameterEditorWindow.cs" id="1_05wq6"]
-[ext_resource type="PackedScene" uid="uid://delbdku3cu7ht" path="res://OptionsGui/FloatEdit.tscn" id="2_r8c13"]
+[ext_resource type="Script" path="res://FramerateDisplay.cs" id="2_g1gt8"]
 
 [node name="ParameterEditorWindow" type="Window"]
 title = "Options"
@@ -14,6 +14,6 @@ offset_right = 300.0
 offset_bottom = 40.0
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" parent="VBoxContainer" instance=ExtResource("2_r8c13")]
+[node name="Label2" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-ParameterName = "XXXXy"
+script = ExtResource("2_g1gt8")

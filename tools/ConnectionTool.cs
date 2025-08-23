@@ -6,6 +6,7 @@ public partial class ConnectionTool : Node2D
 {
     [Export] Node2D firstNode;
     [Export] Node2D secondNode;
+    [Export] public bool EnableDrawing = true;
 
     public override void _Process(double delta)
     {
@@ -14,7 +15,7 @@ public partial class ConnectionTool : Node2D
 
     public override void _Draw()
     {
-        if (firstNode == null || secondNode == null)
+        if (!EnableDrawing || firstNode == null || secondNode == null)
             return;
 
         // Draw the line

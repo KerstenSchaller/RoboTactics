@@ -7,22 +7,42 @@ public partial class FloatEdit : HFlowContainer
     public void Init(FloatParameter parameter)
     {
         _parameter = parameter;
+
+        _label = GetNode<Label>("Label");
+        _valueLineEdit = GetNode<LineEdit>("ValueLineEdit");
+        _hSlider = GetNode<HSlider>("HSlider");
+
         if (_parameter != null)
         {
             _min = _parameter.Min;
             _max = _parameter.Max;
-            if (_label != null) _label.Text = _parameter.Name;
-            if (_valueLineEdit != null) _valueLineEdit.Text = _parameter.Value.ToString("0.###");
-            if (_hSlider != null)
-            {
-                _hSlider.MinValue = _min;
-                _hSlider.MaxValue = _max;
-                _hSlider.Value = _parameter.Value;
-            }
+
+            _label.Text = _parameter.Name;
+            _valueLineEdit.Text = _parameter.Value.ToString("0.###");
+
+            _hSlider.MinValue = _min;
+            _hSlider.MaxValue = _max;
+            _hSlider.Value = _parameter.Value;
+            _hSlider.Step = StepSize;
         }
+        else
+        {
+            _label.Text = "No Param Available";
+            _valueLineEdit.Text = "";
+            _hSlider.Value = _min;
+        }
+
+        _hSlider.ValueChanged += OnSliderValueChanged;
+        _hSlider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+
+        _valueLineEdit.TextChanged += OnLineEditTextChanged;
     }
+
     [Export]
     public string ParameterName { get; set; } = "XXXX";
+
+    [Export]
+    public float StepSize { get; set; } = 0.1f;
 
     private Label _label;
     private LineEdit _valueLineEdit;
@@ -35,16 +55,7 @@ public partial class FloatEdit : HFlowContainer
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        _label = GetNode<Label>("Label");
-        _valueLineEdit = GetNode<LineEdit>("ValueLineEdit");
-        _hSlider = GetNode<HSlider>("HSlider");
 
-        _label.Text = "No Param Available";
-
-        _hSlider.ValueChanged += OnSliderValueChanged;
-        _hSlider.SizeFlagsHorizontal = SizeFlags.ExpandFill; 
-
-        _valueLineEdit.TextChanged += OnLineEditTextChanged;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

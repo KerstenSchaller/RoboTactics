@@ -24,12 +24,16 @@ namespace Behaviours
 
             Vector2 avgVelocity = Vector2.Zero;
             int count = 0;
+            int maxNeighbors = 5;
+            int processed = 0;
             foreach (var body in neighbors)
             {
                 if (body != parent && body is CharacterBody2D cb)
                 {
                     avgVelocity += cb.Velocity;
                     count++;
+                    processed++;
+                    if (processed >= maxNeighbors)break;
                 }
             }
 

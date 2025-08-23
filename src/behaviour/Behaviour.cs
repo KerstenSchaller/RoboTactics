@@ -21,7 +21,7 @@ namespace Behaviours
                 var desired = getDesiredDirectionImpl();
                 return desired;
             }
-            return Vector2.Zero;
+            return Vector2.Inf;
         }
         public virtual bool Enabled
         {
