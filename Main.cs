@@ -67,31 +67,40 @@ using System;
             return;
         }
 
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 80; i++)
         {
             InstantiateAgent(i);
         }
-        AddStaticBodiesAlongSpriteBorders("Background");
+        //AddStaticBodiesAlongSpriteBorders("Background");
     }
 
     private void InstantiateAgent(int index)
     {
         var agentInstance = _agentScene.Instantiate();
-        if (agentInstance is Node2D node2D)
+        var backgroundSprite = GetNodeOrNull<Sprite2D>("Background");
+        if (agentInstance is Node2D node2D && backgroundSprite != null && backgroundSprite.Texture != null)
         {
-            // Find the Camera2D child node
-            var camera = GetNodeOrNull<Camera2D>("Camera2D");
-            if (camera != null)
-            {
-                // Get the camera's visible rectangle in world coordinates
-                Rect2 cameraRect = camera.GetViewportRect();
-                Vector2 topLeft = camera.GetScreenCenterPosition() - cameraRect.Size / 2;
-                var random = new Random();
-                float x = (float)random.NextDouble() * cameraRect.Size.X + topLeft.X;
-                float y = (float)random.NextDouble() * cameraRect.Size.Y + topLeft.Y;
-                node2D.Position = new Vector2(x, y);
-            }
+            // Get background sprite's global transform and size
+            Vector2 texSize = backgroundSprite.Texture.GetSize()/5;
+            Vector2 scale = backgroundSprite.Scale;
+            Vector2 scaledSize = texSize * scale;
+            Transform2D spriteTransform = backgroundSprite.GetGlobalTransform();
 
+            // Calculate the four corners in global coordinates
+            Vector2 offset = scaledSize / 2.0f;
+            Vector2 topLeft = spriteTransform * (new Vector2(0, 0) - offset);
+            Vector2 bottomRight = spriteTransform * (new Vector2(scaledSize.X, scaledSize.Y) - offset);
+
+            // Calculate min/max X/Y with 100px margin
+            float minX = Mathf.Min(topLeft.X, bottomRight.X) + 100;
+            float maxX = Mathf.Max(topLeft.X, bottomRight.X) - 100;
+            float minY = Mathf.Min(topLeft.Y, bottomRight.Y) + 100;
+            float maxY = Mathf.Max(topLeft.Y, bottomRight.Y) - 100;
+
+            var random = new Random();
+            float x = (float)(random.NextDouble() * (maxX - minX) + minX);
+            float y = (float)(random.NextDouble() * (maxY - minY) + minY);
+            node2D.Position = new Vector2(x, y);
         }
         AddChild(agentInstance);
     }

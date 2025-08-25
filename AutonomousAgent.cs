@@ -49,7 +49,7 @@ class AutonomousAgent
 
     public AutonomousAgent(string name,float _maxSpeed, float _maxForce, float _mass)
     {
-        maxSpeed = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxSpeed", _maxSpeed,0,600);
+        maxSpeed = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxSpeed", _maxSpeed,0,1200);
         maxForce = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxForce", _maxForce/(2*60),0,50);
         mass = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.Mass", _mass,0,100);
         // Randomize velocity, keeping total length at 50

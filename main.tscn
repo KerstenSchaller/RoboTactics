@@ -33,7 +33,7 @@ EnableAlignment = false
 EnableSeparation = false
 
 [node name="AutonomousAgentScene2" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("8_r23gi")]
-position = Vector2(1071, 154)
+position = Vector2(940, 110)
 targetNode = NodePath("../AutonomousAgentScene")
 
 [node name="CollisionShapeDrawer" type="Node2D" parent="AutonomousAgentScene2"]
@@ -63,7 +63,7 @@ position = Vector2i(0, 36)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(236, 146)
-zoom = Vector2(0.3, 0.3)
+zoom = Vector2(0.08, 0.08)
 script = ExtResource("9_uy43k")
 
 [node name="Obstacle" parent="." instance=ExtResource("10_n6q06")]

@@ -12,7 +12,11 @@ public partial class CollisionShapeDrawer : Node2D
     {
         foreach (var polygon in GetAllCollisionPolygonsRecursive(GetParent()))
         {
-            DrawCollisionShape(polygon, polygon.GetGlobalTransform());
+            DrawPolygonShape(polygon.Polygon, polygon.GetGlobalTransform(), new Color(1, 1, 0, 0.2f), new Color(1, 1, 0, 0.8f));
+        }
+        foreach (var (shape, owner) in GetAllConvexPolygonsRecursive(GetParent()))
+        {
+            DrawPolygonShape(shape.Points, owner.GetGlobalTransform(), new Color(0, 1, 1, 0.2f), new Color(0, 1, 1, 0.8f));
         }
     }
 
@@ -31,20 +35,30 @@ public partial class CollisionShapeDrawer : Node2D
         }
     }
 
-    private void DrawCollisionShape(CollisionPolygon2D shape, Transform2D transform)
+    // Returns tuples of (ConvexPolygonShape2D, owner Node2D)
+    private System.Collections.Generic.IEnumerable<(ConvexPolygonShape2D, Node2D)> GetAllConvexPolygonsRecursive(Node node)
     {
-        var points = shape.Polygon;
+        if (node is CollisionShape2D cs && cs.Shape is ConvexPolygonShape2D convex && node is Node2D node2d)
+        {
+            yield return (convex, node2d);
+        }
+        foreach (Node child in node.GetChildren())
+        {
+            foreach (var c in GetAllConvexPolygonsRecursive(child))
+                yield return c;
+        }
+    }
+    private void DrawPolygonShape(Vector2[] points, Transform2D transform, Color fillColor, Color outlineColor)
+    {
         if (points.Length >= 3)
         {
             Vector2[] transformedPoints = new Vector2[points.Length];
             for (int i = 0; i < points.Length; i++)
             {
-                // Transform the point from the polygon's local space to global, then to this node's local space
                 transformedPoints[i] = this.ToLocal(transform * points[i]);
             }
-            DrawPolygon(transformedPoints, new Color[] { new Color(1, 1, 0, 0.2f) });
-            DrawPolyline(transformedPoints, new Color(1, 1, 0, 0.8f), 2, true);
+            DrawPolygon(transformedPoints, new Color[] { fillColor });
+            DrawPolyline(transformedPoints, outlineColor, 2, true);
         }
-        // Only drawing PolygonShape2D shapes
     }
 }

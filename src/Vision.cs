@@ -132,37 +132,66 @@ public partial class Vision : Area2D
     }
 
 
-
     private void CreateProceduralVisionPolygon()
     {
-        // Remove existing polygon if present
-        if (_proceduralPolygon != null && _proceduralPolygon.GetParent() == this)
-            RemoveChild(_proceduralPolygon);
-
-        _proceduralPolygon = new CollisionPolygon2D();
-        _proceduralPolygon.Name = "ProceduralVisionPolygon";
+        // Remove existing polygons if present
+        foreach (var child in GetChildren())
+        {
+            if (child is CollisionShape2D cs && (cs.Name == "ProceduralVisionConvexA" || cs.Name == "ProceduralVisionConvexB"))
+                RemoveChild(cs);
+        }
 
         // Calculate points for the vision shape
-        float radius = VisionRadius;
-        float rearAngle = Mathf.DegToRad(RearCutoutAngleDeg);
+        float radius = VisionRadius.Value;
+        float rearAngle = Mathf.DegToRad(RearCutoutAngleDeg.Value);
         float startAngle = rearAngle / 2f + Mathf.Pi; // Rotate 180 degrees
         float endAngle = 2f * Mathf.Pi - rearAngle / 2f + Mathf.Pi; // Rotate 180 degrees
-        int segments = 48; // More segments = smoother circle
+        int segments = 12; // More segments = smoother circle
 
-        Vector2[] points = new Vector2[segments + 2];
-        int idx = 0;
-        // Add points for the visible arc (front)
-        for (int i = 0; i <= segments; i++)
+        // Split the arc into two halves
+        int halfSegments = segments / 2;
+
+        // First half
+        Vector2[] pointsA = new Vector2[halfSegments + 2];
+        int idxA = 0;
+        for (int i = 0; i <= halfSegments; i++)
         {
             float t = (float)i / segments;
             float angle = Mathf.Lerp(startAngle, endAngle, t);
-            points[idx++] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+            pointsA[idxA++] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
         }
-        // Add center point to close the polygon
-        points[idx] = Vector2.Zero;
+        pointsA[idxA] = Vector2.Zero;
 
-        _proceduralPolygon.Polygon = points;
-        AddChild(_proceduralPolygon);
+        // Second half
+        Vector2[] pointsB = new Vector2[halfSegments + 2];
+        int idxB = 0;
+        for (int i = halfSegments; i <= segments; i++)
+        {
+            float t = (float)i / segments;
+            float angle = Mathf.Lerp(startAngle, endAngle, t);
+            pointsB[idxB++] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+        }
+        pointsB[idxB] = Vector2.Zero;
+
+        // Create first CollisionShape2D with ConvexPolygonShape2D
+        var shapeA = new ConvexPolygonShape2D();
+        shapeA.Points = pointsA;
+        var csA = new CollisionShape2D
+        {
+            Name = "ProceduralVisionConvexA",
+            Shape = shapeA
+        };
+        AddChild(csA);
+
+        // Create second CollisionShape2D with ConvexPolygonShape2D
+        var shapeB = new ConvexPolygonShape2D();
+        shapeB.Points = pointsB;
+        var csB = new CollisionShape2D
+        {
+            Name = "ProceduralVisionConvexB",
+            Shape = shapeB
+        };
+        AddChild(csB);
     }
 
     public Godot.Collections.Array<Area2D> GetAllOverlappingAreas()
