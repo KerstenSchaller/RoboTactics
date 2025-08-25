@@ -7,23 +7,38 @@ public partial class AutonomousAgentScene : CharacterBody2D
     // Enum for behaviour types
     public enum BehaviourType
     {
-    Seek,
-    Flee,
-    CircleAround,
-    Wander,
-    Arrive,
-    Pursue,
-    Evade,
-    Cohesion,
-    Alignment,
-    Separation,
-    WallAvoidance
+        Seek,
+        Flee,
+        CircleAround,
+        Wander,
+        Arrive,
+        Pursue,
+        Evade,
+        Cohesion,
+        Alignment,
+        Separation,
+        WallAvoidance,
+        GroupLimiter
     }
     AutonomousAgent autonomousAgent;
     [Export] Node2D targetNode;
     [Export] Area2D visionArea;
 
     // Exported bools for each behaviour
+    private bool _enableGroupLimiter;
+    [Export]
+    public bool EnableGroupLimiter
+    {
+        get => _enableGroupLimiter;
+        set
+        {
+            if (_enableGroupLimiter != value)
+            {
+                _enableGroupLimiter = value;
+                SetBehaviourEnabled(BehaviourType.GroupLimiter, value);
+            }
+        }
+    }
 
     private bool _enableWallAvoidance;
     [Export]
@@ -202,6 +217,7 @@ public partial class AutonomousAgentScene : CharacterBody2D
     private Behaviours.Alignment alignmentBehaviour;
     private Behaviours.Separation separationBehaviour;
     private Behaviours.WallAvoidance wallAvoidanceBehaviour;
+    private Behaviours.GroupLimiter groupLimiterBehaviour;
 
     public override void _Ready()
     {
@@ -217,10 +233,11 @@ public partial class AutonomousAgentScene : CharacterBody2D
         arriveBehaviour = new Behaviours.Arrive("boidAgent", targetNode, this);
         pursueBehaviour = new Behaviours.Pursue("boidAgent", targetNode, this);
         evadeBehaviour = new Behaviours.Evade("boidAgent", targetNode, this);
-        cohesionBehaviour = new Behaviours.Cohesion("boidAgent", visionArea as Vision, this);
-        alignmentBehaviour = new Behaviours.Alignment("boidAgent", visionArea as Vision, this);
+    cohesionBehaviour = new Behaviours.Cohesion("boidAgent", visionArea as Vision, this);
+    alignmentBehaviour = new Behaviours.Alignment("boidAgent", visionArea as Vision, this);
     separationBehaviour = new Behaviours.Separation("boidAgent", visionArea as Vision, this);
     wallAvoidanceBehaviour = new Behaviours.WallAvoidance("boidAgent", visionArea as Vision, this);
+    groupLimiterBehaviour = new Behaviours.GroupLimiter("boidAgent", visionArea as Vision, this);
 
     // Add all behaviours to the agent
     autonomousAgent.addBehaviour(seekBehaviour);
@@ -234,6 +251,7 @@ public partial class AutonomousAgentScene : CharacterBody2D
     autonomousAgent.addBehaviour(alignmentBehaviour);
     autonomousAgent.addBehaviour(separationBehaviour);
     autonomousAgent.addBehaviour(wallAvoidanceBehaviour);
+    autonomousAgent.addBehaviour(groupLimiterBehaviour);
 
     // Set enabled state from exported bools
     SetBehaviourEnabled(BehaviourType.Seek, EnableSeek);
@@ -247,6 +265,7 @@ public partial class AutonomousAgentScene : CharacterBody2D
     SetBehaviourEnabled(BehaviourType.Alignment, EnableAlignment);
     SetBehaviourEnabled(BehaviourType.Separation, EnableSeparation);
     SetBehaviourEnabled(BehaviourType.WallAvoidance, EnableWallAvoidance);
+    SetBehaviourEnabled(BehaviourType.GroupLimiter, EnableGroupLimiter);
     }
 
     // Dynamically add a behaviour to the agent
@@ -306,6 +325,9 @@ public partial class AutonomousAgentScene : CharacterBody2D
                 break;
             case BehaviourType.WallAvoidance:
                 if (wallAvoidanceBehaviour != null) wallAvoidanceBehaviour.Enabled = enabled;
+                break;
+            case BehaviourType.GroupLimiter:
+                if (groupLimiterBehaviour != null) groupLimiterBehaviour.Enabled = enabled;
                 break;
         }
     }

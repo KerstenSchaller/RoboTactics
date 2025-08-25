@@ -31,6 +31,10 @@ public partial class Vision : Area2D
             // Apply the node's rotation to the angle
             float rotatedAngle = angle + globalRotation;
             Vector2 dir = new Vector2(Mathf.Cos(rotatedAngle), Mathf.Sin(rotatedAngle));
+            // Check if dir contains NaN values before proceeding
+            if (float.IsNaN(dir.X) || float.IsNaN(dir.Y))
+                continue;
+
             Vector2 rayTo = from + dir * radius * GlobalTransform.Scale.X;
             var query = new Godot.PhysicsRayQueryParameters2D
             {

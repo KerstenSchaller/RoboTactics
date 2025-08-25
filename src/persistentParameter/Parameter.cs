@@ -44,6 +44,7 @@ namespace PersistentParameter
             {
                 GD.PrintErr($"[DEFAULT] {Name} = {defaultValue}");
             }
+            Save();
         }
 
         public T Value

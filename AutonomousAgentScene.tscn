@@ -20,6 +20,7 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_uquwu")
 visionArea = NodePath("VisionArea")
+EnableGroupLimiter = true
 EnableWallAvoidance = true
 EnableWander = true
 EnableCohesion = true
@@ -46,7 +47,6 @@ script = ExtResource("3_kp0ci")
 UseProceduralVisionShape = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
-visible = false
 shape = SubResource("CircleShape2D_23xj0")
 disabled = true
 
