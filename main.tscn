@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://gc1lqe6t6vxd"]
+[gd_scene load_steps=13 format=3 uid="uid://gc1lqe6t6vxd"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_u7wvr"]
 [ext_resource type="Texture2D" uid="uid://c6nx24520n0y2" path="res://Dark-Deep-Space-4K-Wallpaper1.jpg" id="1_ue7b0"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="8_r23gi"]
 [ext_resource type="Script" path="res://ControllableCamera2d.cs" id="9_uy43k"]
 [ext_resource type="PackedScene" uid="uid://bcvus2mbdtnbi" path="res://Obstacle.tscn" id="10_n6q06"]
+[ext_resource type="Script" path="res://ErrorHandler.cs" id="10_wycor"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fn6yg"]
 size = Vector2(903, 10365)
@@ -98,5 +99,8 @@ shape = SubResource("RectangleShape2D_vui4y")
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="Boundary"]
 position = Vector2(362, -5235)
 shape = SubResource("RectangleShape2D_vui4y")
+
+[node name="ErrorHandler" type="Node" parent="."]
+script = ExtResource("10_wycor")
 
 [editable path="Obstacle5"]

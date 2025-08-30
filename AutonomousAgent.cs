@@ -45,15 +45,24 @@ partial class AutonomousAgent : Node
 
     List<Behaviours.Behaviour> behaviours = new List<Behaviours.Behaviour>();
 
-    public AutonomousAgent(string name,float _maxSpeed, float _maxForce, float _mass)
+    public AutonomousAgent(string name, float _maxSpeed, float _maxForce, float _mass)
     {
-        maxSpeed = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxSpeed", _maxSpeed,0f,1200f);
-        maxForce = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxForce", _maxForce/(2*60),0,50);
-        mass = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.Mass", _mass,0,100);
+        maxSpeed = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxSpeed", _maxSpeed, 0f, 1200f);
+        maxForce = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxForce", _maxForce / (2 * 60), 0, 50);
+        mass = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.Mass", _mass, 0, 100);
+
+        var n = GetNode<Area2D>("xxx");
+        n._Draw();
+
         // Randomize velocity, keeping total length at 50
         var rand = new Random();
         double angle = rand.NextDouble() * Math.PI * 2;
+
+
+
         velocity = new Vector2((float)(Math.Cos(angle) * 50), (float)(Math.Sin(angle) * 50));
+
+
 
 
     }

@@ -8,7 +8,9 @@ namespace Behaviours
         Node2D parent;
     float desiredDistance;
     float distanceTolerance;
-    bool increasedTolerance = false; 
+    bool increasedTolerance = false;
+        private float circleShiftDeg = 30;
+
 
         public CircleAround(string name, Node2D _target, Node2D _parent, float _desiredDistance = 500.0f, float _distanceTolerance = 5.0f)
         {
@@ -16,7 +18,7 @@ namespace Behaviours
             this.target = _target;
             this.parent = _parent;
             this.desiredDistance = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.CircleAroundDesiredDistance", _desiredDistance, 0, 1000);
-            this.distanceTolerance = desiredDistance * 0.1f;
+            this.distanceTolerance = desiredDistance * 0.01f; // factor influences actual acquired distance
         }
 
         public override Vector2 getDesiredDirectionImpl()
@@ -41,11 +43,15 @@ namespace Behaviours
             {
                 // Reset increased tolerance when outside the increased range
                 increasedTolerance = false;
-                // Move toward a point on the toTarget vector at desiredDistance from the target
+                // Move toward a point on the toTarget vector at desiredDistance from the target,
+                // but shift it along the circle by rotating the direction vector by a small angle
                 Vector2 direction = toTarget.Normalized();
-                Vector2 desiredPoint = target.Position - direction * desiredDistance;
+                float angle = circleShiftDeg * Mathf.Pi / 180.0f; // 15 degree shift in radians
+                // Choose direction of rotation (clockwise or counterclockwise)
+                Vector2 rotatedDirection = direction.Rotated(angle);
+                Vector2 desiredPoint = target.Position - rotatedDirection * desiredDistance;
                 Vector2 toDesiredPoint = desiredPoint - parent.Position;
-                GD.Print("Moving towards desired point");
+                GD.Print("Moving towards shifted desired point on circle");
                 return toDesiredPoint;
             }
         }

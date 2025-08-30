@@ -18,5 +18,5 @@ size_flags_horizontal = 3
 [node name="Label2" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_8u8fr")
-text = "FPS: 10"
+text = "FPS: 143"
 script = ExtResource("2_g1gt8")
