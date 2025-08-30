@@ -10,9 +10,9 @@ namespace Behaviours
 
         private Vector2? lastClosestWorldPoint = null;
 
-        public WallAvoidance(string name, Vision vision, Node2D parent)
+        public WallAvoidance( Vision vision, Node2D parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.WallAvoidanceWeight", 1.0f, 0, 10);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.WallAvoidanceWeight", 1.0f, 0, 10);
             this.vision = vision;
             this.parent = parent;
             

@@ -8,9 +8,9 @@ namespace Behaviours
         Node2D parent;
         public float slowingRadius = 100f;
 
-        public Arrive(string name, Node2D _target, Node2D _parent)
+        public Arrive( Node2D _target, Node2D _parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.ArriveWeight", 1.0f, 0, 10);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.ArriveWeight", 1.0f, 0, 10);
             this.target = _target;
             this.parent = _parent;
         }

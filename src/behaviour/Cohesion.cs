@@ -7,9 +7,9 @@ namespace Behaviours
         private Vision vision;
         private Node2D parent;
 
-        public Cohesion(string name, Vision vision, Node2D parent)
+        public Cohesion( Vision vision, Node2D parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.CohesionWeight", 1.0f, 0, 10);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.CohesionWeight", 1.0f, 0, 10);
             this.vision = vision;
             this.parent = parent;
         }

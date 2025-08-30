@@ -6,18 +6,18 @@ namespace Behaviours
     {
         Node2D target;
         Node2D parent;
-    float desiredDistance;
-    float distanceTolerance;
-    bool increasedTolerance = false;
+        float desiredDistance;
+        float distanceTolerance;
+        bool increasedTolerance = false;
         private float circleShiftDeg = 30;
 
 
-        public CircleAround(string name, Node2D _target, Node2D _parent, float _desiredDistance = 500.0f, float _distanceTolerance = 5.0f)
+        public CircleAround(Node2D _target, Node2D _parent, BehaviorSet behaviorSet, float _desiredDistance = 500.0f, float _distanceTolerance = 5.0f) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.CircleAroundWeight", 1.0f, 0, 10);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.CircleAroundWeight", 1.0f, 0, 10);
             this.target = _target;
             this.parent = _parent;
-            this.desiredDistance = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.CircleAroundDesiredDistance", _desiredDistance, 0, 1000);
+            this.desiredDistance = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.CircleAroundDesiredDistance", _desiredDistance, 0, 1000);
             this.distanceTolerance = desiredDistance * 0.01f; // factor influences actual acquired distance
         }
 

@@ -7,9 +7,9 @@ namespace Behaviours
         private Vision vision;
         private Node2D parent;
 
-        public Separation(string name, Vision vision, Node2D parent)
+        public Separation( Vision vision, Node2D parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.SeparationWeight", 1.0f, 0.0f, 10.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.SeparationWeight", 1.0f, 0.0f, 10.0f);
             this.vision = vision;
             this.parent = parent;
         }

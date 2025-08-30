@@ -20,9 +20,9 @@ namespace Behaviours
 
         private Node2D parent;
 
-        public Wander(string name, Node2D _target, Node2D _parent)
+        public Wander( Node2D _target, Node2D _parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.WanderWeight", 1.0f, 0.0f, 10.0f);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.WanderWeight", 1.0f, 0.0f, 10.0f);
             this.parent = _parent;
         }
 

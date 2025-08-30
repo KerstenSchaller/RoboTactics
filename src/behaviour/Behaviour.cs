@@ -8,6 +8,11 @@ namespace Behaviours
         protected FloatParameter weight;
         public abstract Vector2 getDesiredDirectionImpl();
 
+        public Behaviour(BehaviorSet behaviorSet)
+        {
+            behaviorSet.AddBehavior(this);
+        }
+
         public float Weight
         {
             get { return weight; }

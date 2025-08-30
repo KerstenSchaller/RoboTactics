@@ -9,9 +9,9 @@ namespace Behaviours
         private Vision vision;
         private Node2D parent;
 
-        public Alignment(string name, Vision vision, Node2D parent)
+        public Alignment( Vision vision, Node2D parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.AlignmentWeight", 1.0f, 0, 10);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.AlignmentWeight", 1.0f, 0, 10);
             this.vision = vision;
             this.parent = parent;
         }

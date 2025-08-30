@@ -225,33 +225,24 @@ public partial class AutonomousAgentScene : CharacterBody2D
         int secondsTillFullSpeed = 2;
         autonomousAgent = new AutonomousAgent("boidAgent", speed, speed / (secondsTillFullSpeed * 60), 0.5f);
 
+        BehaviorSet behaviorSet = new BehaviorSet("allBehaviours");
+
         // Instantiate all behaviours
-        seekBehaviour = new Behaviours.Seek("boidAgent", targetNode, this);
-        fleeBehaviour = new Behaviours.Flee("boidAgent", targetNode, this);
-        circleAroundBehaviour = new Behaviours.CircleAround("boidAgent", targetNode, this);
-        wanderBehaviour = new Behaviours.Wander("boidAgent", targetNode, this);
-        arriveBehaviour = new Behaviours.Arrive("boidAgent", targetNode, this);
-        pursueBehaviour = new Behaviours.Pursue("boidAgent", targetNode, this);
-        evadeBehaviour = new Behaviours.Evade("boidAgent", targetNode, this);
-        cohesionBehaviour = new Behaviours.Cohesion("boidAgent", visionArea as Vision, this);
-        alignmentBehaviour = new Behaviours.Alignment("boidAgent", visionArea as Vision, this);
-        separationBehaviour = new Behaviours.Separation("boidAgent", visionArea as Vision, this);
-        wallAvoidanceBehaviour = new Behaviours.WallAvoidance("boidAgent", visionArea as Vision, this);
-        groupLimiterBehaviour = new Behaviours.GroupLimiter("boidAgent", visionArea as Vision, this);
+        seekBehaviour = new Behaviours.Seek( targetNode, this,behaviorSet);
+        fleeBehaviour = new Behaviours.Flee( targetNode, this,behaviorSet);
+        circleAroundBehaviour = new Behaviours.CircleAround( targetNode, this,behaviorSet);
+        wanderBehaviour = new Behaviours.Wander( targetNode, this,behaviorSet);
+        arriveBehaviour = new Behaviours.Arrive( targetNode, this,behaviorSet);
+        pursueBehaviour = new Behaviours.Pursue( targetNode, this,behaviorSet);
+        evadeBehaviour = new Behaviours.Evade( targetNode, this,behaviorSet);
+        cohesionBehaviour = new Behaviours.Cohesion( visionArea as Vision, this,behaviorSet);
+        alignmentBehaviour = new Behaviours.Alignment( visionArea as Vision, this,behaviorSet);
+        separationBehaviour = new Behaviours.Separation( visionArea as Vision, this,behaviorSet);
+        wallAvoidanceBehaviour = new Behaviours.WallAvoidance( visionArea as Vision, this,behaviorSet);
+        groupLimiterBehaviour = new Behaviours.GroupLimiter(visionArea as Vision, this, behaviorSet);
 
         // Add all behaviours to the agent
-        autonomousAgent.addBehaviour(seekBehaviour);
-        autonomousAgent.addBehaviour(fleeBehaviour);
-        autonomousAgent.addBehaviour(circleAroundBehaviour);
-        autonomousAgent.addBehaviour(wanderBehaviour);
-        autonomousAgent.addBehaviour(arriveBehaviour);
-        autonomousAgent.addBehaviour(pursueBehaviour);
-        autonomousAgent.addBehaviour(evadeBehaviour);
-        autonomousAgent.addBehaviour(cohesionBehaviour);
-        autonomousAgent.addBehaviour(alignmentBehaviour);
-        autonomousAgent.addBehaviour(separationBehaviour);
-        autonomousAgent.addBehaviour(wallAvoidanceBehaviour);
-        autonomousAgent.addBehaviour(groupLimiterBehaviour);
+        autonomousAgent.BehaviourSet = behaviorSet;
 
 
         // Set enabled state from exported bools

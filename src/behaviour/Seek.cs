@@ -6,9 +6,9 @@ namespace Behaviours
     {
         Node2D target;
         Node2D parent;
-        public Seek(string name, Node2D _target, Node2D _parent)
+        public Seek( Node2D _target, Node2D _parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.SeekWeight", 1.0f, 0, 10);
+            this.weight = PersistentParameter.ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.SeekWeight", 1.0f, 0, 10);
             this.target = _target;
             this.parent = _parent;
         }

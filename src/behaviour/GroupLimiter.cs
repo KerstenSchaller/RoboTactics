@@ -14,13 +14,13 @@ namespace Behaviours
         private bool isFleeing = false;
         private Vector2 lastFleeCenter = Vector2.Zero;
 
-        public GroupLimiter(string name, Vision vision, Node2D parent)
+        public GroupLimiter( Vision vision, Node2D parent, BehaviorSet behaviorSet) : base(behaviorSet)
         {
-            this.maxGroupSize = ParameterRegistry.GetIntParameter($"{name}.GroupLimiterMaxGroupSize", 10, 1, 100);
-            this.minDistance = ParameterRegistry.GetFloatParameter($"{name}.GroupLimiterMinDistance", 500f, 100f, 1000f);
+            this.maxGroupSize = ParameterRegistry.GetIntParameter($"{behaviorSet.Name}.GroupLimiterMaxGroupSize", 10, 1, 100);
+            this.minDistance = ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.GroupLimiterMinDistance", 500f, 100f, 1000f);
             this.vision = vision;
             this.parent = parent;
-            this.weight = ParameterRegistry.GetFloatParameter($"{name}.GroupLimiterWeight", 1.0f, 0, 10);
+            this.weight = ParameterRegistry.GetFloatParameter($"{behaviorSet.Name}.GroupLimiterWeight", 1.0f, 0, 10);
         }
 
         public override Vector2 getDesiredDirectionImpl()

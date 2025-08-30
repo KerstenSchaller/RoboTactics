@@ -15,7 +15,8 @@ partial class AutonomousAgent : Node
         {
             acceleration = new Vector2();
             float weightCount = 0;
-            foreach (var behaviour in behaviours)
+            if(BehaviourSet == null)return new Vector2();
+            foreach (var behaviour in BehaviourSet.Behaviours)
             {
                 if (behaviour.Enabled)
                 {
@@ -43,7 +44,7 @@ partial class AutonomousAgent : Node
     Vector2 acceleration;
     Vector2 velocity;
 
-    List<Behaviours.Behaviour> behaviours = new List<Behaviours.Behaviour>();
+    public Behaviours.BehaviorSet BehaviourSet { get; set; }
 
     public AutonomousAgent(string name, float _maxSpeed, float _maxForce, float _mass)
     {
@@ -77,9 +78,9 @@ partial class AutonomousAgent : Node
 
     public void addBehaviour(Behaviours.Behaviour _behaviour)
     {
-        if (!behaviours.Contains(_behaviour))
+        if (!BehaviourSet.Behaviours.Contains(_behaviour))
         {
-            behaviours.Add(_behaviour);
+            BehaviourSet.AddBehavior(_behaviour);
         }
     }
 
@@ -93,7 +94,7 @@ partial class AutonomousAgent : Node
 
     public void removeBehaviour(Behaviours.Behaviour _behaviour)
     {
-        behaviours.Remove(_behaviour);
+        BehaviourSet.Behaviours.Remove(_behaviour);
     }
 
     public void applyForce(Vector2 desired, float Weight)
