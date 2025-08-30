@@ -51,8 +51,7 @@ partial class AutonomousAgent : Node
         maxForce = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxForce", _maxForce / (2 * 60), 0, 50);
         mass = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.Mass", _mass, 0, 100);
 
-        var n = GetNode<Area2D>("xxx");
-        n._Draw();
+
 
         // Randomize velocity, keeping total length at 50
         var rand = new Random();
