@@ -34,17 +34,17 @@ namespace PersistentParameter
             Name = name;
             Min = min;
             Max = max;
-
             if (ParameterRegistry.TryLoad(Name, out T storedValue))
             {
-                _value = storedValue;
                 GD.Print($"[LOAD] {Name} = {_value}");
+                _value = storedValue;
             }
             else
             {
-                GD.PrintErr($"[DEFAULT] {Name} = {defaultValue}");
+                GD.Print($"[DEFAULT] {Name} = {defaultValue}");
+                ParameterRegistry.StoreAndPersist(Name, defaultValue);
+                _value = defaultValue;
             }
-            Save();
         }
 
         public T Value
@@ -60,7 +60,7 @@ namespace PersistentParameter
                 }
                 else
                 {
-                    GD.Print($"[NOCHANGE] {Name} remains {_value}");
+                    //GD.Print($"[NOCHANGE] {Name} remains {_value}");
                 }
             }
         }

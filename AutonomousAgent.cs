@@ -4,9 +4,7 @@ using PersistentParameter;
 using System;
 using System.Collections.Generic;
 
-
-
-class AutonomousAgent
+partial class AutonomousAgent : Node
 {
     public float Mass { get => mass; set => mass.Value = value; }
     public float MaxSpeed { get => maxSpeed; set => maxSpeed.Value = value; }
@@ -49,7 +47,7 @@ class AutonomousAgent
 
     public AutonomousAgent(string name,float _maxSpeed, float _maxForce, float _mass)
     {
-        maxSpeed = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxSpeed", _maxSpeed,0,1200);
+        maxSpeed = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxSpeed", _maxSpeed,0f,1200f);
         maxForce = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.MaxForce", _maxForce/(2*60),0,50);
         mass = PersistentParameter.ParameterRegistry.GetFloatParameter($"{name}.Mass", _mass,0,100);
         // Randomize velocity, keeping total length at 50
@@ -68,11 +66,20 @@ class AutonomousAgent
     }
 
 
+
     public void addBehaviour(Behaviours.Behaviour _behaviour)
     {
-        if(!behaviours.Contains(_behaviour))
+        if (!behaviours.Contains(_behaviour))
         {
             behaviours.Add(_behaviour);
+        }
+    }
+
+    public void addBehaviours(IEnumerable<Behaviours.Behaviour> behaviourList)
+    {
+        foreach (var behaviour in behaviourList)
+        {
+            addBehaviour(behaviour);
         }
     }
 

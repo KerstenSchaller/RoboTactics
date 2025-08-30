@@ -1,10 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://gc1lqe6t6vxd"]
+[gd_scene load_steps=12 format=3 uid="uid://gc1lqe6t6vxd"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_u7wvr"]
 [ext_resource type="Texture2D" uid="uid://c6nx24520n0y2" path="res://Dark-Deep-Space-4K-Wallpaper1.jpg" id="1_ue7b0"]
 [ext_resource type="Script" path="res://tools/ConnectionTool.cs" id="4_w5lbw"]
 [ext_resource type="Script" path="res://tools/CollisionShapeDrawer.cs" id="5_h108h"]
-[ext_resource type="Script" path="res://tools/PathDrawer.cs" id="6_rhrhl"]
 [ext_resource type="Texture2D" uid="uid://d06mpr5pe82fg" path="res://icon.svg" id="7_pyxjq"]
 [ext_resource type="PackedScene" uid="uid://d32flxndj0l1m" path="res://OptionsGui/ParameterEditorWindow.tscn" id="8_21bvg"]
 [ext_resource type="PackedScene" uid="uid://crwlu1igwd1qj" path="res://AutonomousAgentScene.tscn" id="8_r23gi"]
@@ -25,16 +24,18 @@ position = Vector2(256, 152)
 scale = Vector2(5, 5)
 texture = ExtResource("1_ue7b0")
 
-[node name="AutonomousAgentScene" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("8_r23gi")]
-position = Vector2(1638, 93.0001)
-targetNode = NodePath("../AutonomousAgentScene2")
-EnableCohesion = false
-EnableAlignment = false
-EnableSeparation = false
+[node name="AutonomousAgentScene3" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("8_r23gi")]
+position = Vector2(-465, 1633)
+targetNode = NodePath("../Obstacle2")
+
+[node name="CollisionShapeDrawer" type="Node2D" parent="AutonomousAgentScene3"]
+position = Vector2(-5496.67, -3203.33)
+scale = Vector2(3.33333, 3.33333)
+script = ExtResource("5_h108h")
 
 [node name="AutonomousAgentScene2" parent="." node_paths=PackedStringArray("targetNode") instance=ExtResource("8_r23gi")]
-position = Vector2(940, 110)
-targetNode = NodePath("../AutonomousAgentScene")
+position = Vector2(-1984, -577)
+targetNode = NodePath("../Obstacle")
 
 [node name="CollisionShapeDrawer" type="Node2D" parent="AutonomousAgentScene2"]
 position = Vector2(-5496.67, -3203.33)
@@ -43,16 +44,13 @@ script = ExtResource("5_h108h")
 
 [node name="DistanceTool" type="Node2D" parent="." node_paths=PackedStringArray("firstNode", "secondNode")]
 script = ExtResource("4_w5lbw")
-firstNode = NodePath("../AutonomousAgentScene")
-secondNode = NodePath("../AutonomousAgentScene2")
-EnableDrawing = false
+firstNode = NodePath("../AutonomousAgentScene2")
+secondNode = NodePath("../Obstacle")
 
-[node name="PathDrawer" type="Node2D" parent="."]
-visible = false
-script = ExtResource("6_rhrhl")
-TargetNode = NodePath("../AutonomousAgentScene")
-MaxLineSegments = 150
-DistanceThreshold = 30.0
+[node name="DistanceTool2" type="Node2D" parent="." node_paths=PackedStringArray("firstNode", "secondNode")]
+script = ExtResource("4_w5lbw")
+firstNode = NodePath("../AutonomousAgentScene3")
+secondNode = NodePath("../Obstacle2")
 
 [node name="Icon" type="Sprite2D" parent="."]
 position = Vector2(349, 879)
@@ -70,7 +68,7 @@ script = ExtResource("9_uy43k")
 position = Vector2(-872, -426)
 
 [node name="Obstacle2" parent="." instance=ExtResource("10_n6q06")]
-position = Vector2(-444, 543)
+position = Vector2(-969, 887)
 
 [node name="Obstacle3" parent="." instance=ExtResource("10_n6q06")]
 position = Vector2(1430, -498)

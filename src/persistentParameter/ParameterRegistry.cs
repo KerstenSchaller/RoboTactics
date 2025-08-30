@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace PersistentParameter
 {
@@ -11,6 +12,8 @@ namespace PersistentParameter
 
         private static Dictionary<string, object> _parameters = new();
         private static Dictionary<string, object> _storage = new(); // simulates persistence
+        private static bool initialized;
+
 
         public static IEnumerable<IParameter> GetAllParameters()
         {
@@ -26,13 +29,35 @@ namespace PersistentParameter
         {
             var loaded = Serializer.ReadFromFile(DefaultFilePath);
             if (loaded != null)
-                _storage = loaded;
+                _parameters = loaded;
         }
 
-        public static Parameter<T> CreateParameter<T>(string name, T defaultValue, T min, T max)
+        public static Parameter<T> GetParameter<T>(string name, T defaultValue, T min, T max)
         {
-            if (_parameters.TryGetValue(name, out var existing) && existing is Parameter<T> typed)
-            return typed;
+            if(_parameters.ContainsKey(name))
+            {
+                var existing = _parameters[name];
+                if (existing is Parameter<T> existingParam)
+                {
+                    return existingParam;
+                }
+                else 
+                {
+                    // Attempt to cast the underlying value to T
+                    try
+                    {
+                        var castedParam = new Parameter<T>(name, (T)Convert.ChangeType(existing, typeof(T)), min, max);
+                        _parameters[name] = castedParam;
+                        ParameterWindow?.Update();
+                        return castedParam;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidCastException($"Parameter '{name}' exists but cannot be cast to type {typeof(T)}. Actual type: {existing.GetType()}", ex);
+                    }
+                }
+
+            }
 
             var param = new Parameter<T>(name, defaultValue, min, max);
             _parameters[name] = param;
@@ -42,24 +67,36 @@ namespace PersistentParameter
 
         public static Parameter<float> GetFloatParameter(string name, float defaultValue = 0f, float min = float.MinValue, float max = float.MaxValue)
         {
-            return CreateParameter(name, defaultValue, min, max);
+            if (initialized == false) initialize();
+            return GetParameter(name, defaultValue, min, max);
         }
+
+        private static void initialize()
+        {
+            if (initialized) return;
+
+            // Load parameters from file or other sources
+            LoadFromFile();
+
+            initialized = true;
+        }
+
 
         public static Parameter<int> GetIntParameter(string name, int defaultValue = 0, int min = int.MinValue, int max = int.MaxValue)
         {
-            return CreateParameter(name, defaultValue, min, max);
+            return GetParameter(name, defaultValue, min, max);
         }
 
         public static Parameter<bool> GetBoolParameter(string name, bool defaultValue = false)
         {
             // min/max not meaningful for bool, so just pass defaultValue for both
-            return CreateParameter(name, defaultValue, defaultValue, defaultValue);
+            return GetParameter(name, defaultValue, defaultValue, defaultValue);
         }
 
         public static Parameter<string> GetStringParameter(string name, string defaultValue = "")
         {
             // min/max not meaningful for string, so just pass defaultValue for both
-            return CreateParameter(name, defaultValue, defaultValue, defaultValue);
+            return GetParameter(name, defaultValue, defaultValue, defaultValue);
         }
 
         public static void Register<T>(Parameter<T> param)
@@ -73,22 +110,15 @@ namespace PersistentParameter
 
         public static bool TryLoad<T>(string name, out T value)
         {
-            LoadFromFile(); // Ensure _storage is populated
-
-            if (_storage.TryGetValue(name, out Object stored))
-            {
-                try
+                // Try to load from file using Serializer's generic loader
+                value = Serializer.ReadParameter(DefaultFilePath, name, default(T));
+                if (!EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
-                    value = (T)Convert.ChangeType(stored, typeof(T));
+                    GD.Print($"loading: successfully loaded {name} = {value} from file");
                     return true;
                 }
-                catch (Exception e)
-                {
-                    GD.PrintErr($"loading: failed to convert {name}, stored type: {stored.GetType()}, error: {e.Message}");
-                }
-            }
-            value = default!;
-            return false;
+                value = default!;
+                return false;
         }
 
         public static void Store<T>(string name, T value)
@@ -101,11 +131,7 @@ namespace PersistentParameter
                 ? typedParam
                 : null;
 
-        public static void SaveAll()
-        {
-            foreach (var param in _parameters.Values)
-                Console.WriteLine($"[SAVE ALL] {param}");
-        }
+
 
         public static void LoadAll<T>(Dictionary<string, T> loadedValues)
         {

@@ -67,7 +67,7 @@ using System;
             return;
         }
 
-        for (int i = 0; i < 80; i++)
+        for (int i = 0; i < 0; i++)
         {
             InstantiateAgent(i);
         }

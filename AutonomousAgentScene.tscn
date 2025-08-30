@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://AutonomousAgentScene.cs" id="1_uquwu"]
 [ext_resource type="Script" path="res://HurtBoxArea.cs" id="2_geqqy"]
 [ext_resource type="Script" path="res://HealthComponent.cs" id="3_28g8f"]
-[ext_resource type="Script" path="res://src/Vision.cs" id="3_kp0ci"]
+[ext_resource type="Script" path="res://MovementIntelligence.cs" id="5_fox3e"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rnstr"]
 radius = 58.0
@@ -20,12 +20,7 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_uquwu")
 visionArea = NodePath("VisionArea")
-EnableGroupLimiter = true
-EnableWallAvoidance = true
-EnableWander = true
-EnableCohesion = true
-EnableAlignment = true
-EnableSeparation = true
+EnableCircleAround = true
 
 [node name="HurtBoxArea" type="Area2D" parent="."]
 collision_layer = 4
@@ -43,8 +38,6 @@ script = ExtResource("3_28g8f")
 [node name="VisionArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 2
-script = ExtResource("3_kp0ci")
-UseProceduralVisionShape = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
 shape = SubResource("CircleShape2D_23xj0")
@@ -73,3 +66,6 @@ metadata/_edit_use_anchors_ = true
 
 [node name="PhysicsCollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_utokv")
+
+[node name="MovementIntelligence" type="Node" parent="."]
+script = ExtResource("5_fox3e")

@@ -2,7 +2,7 @@ using Godot;
 
 namespace Behaviours
 {
-    public abstract class Behaviour
+    public abstract partial class Behaviour 
     {
         protected bool enabled = false;
         protected FloatParameter weight;
